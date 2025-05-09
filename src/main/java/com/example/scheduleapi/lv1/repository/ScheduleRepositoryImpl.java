@@ -8,6 +8,7 @@ import org.springframework.jdbc.core.simple.SimpleJdbcInsert;
 import org.springframework.stereotype.Repository;
 
 import java.sql.Timestamp;
+import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.util.Map;
 
@@ -36,23 +37,22 @@ public class ScheduleRepositoryImpl implements ScheduleRepository {
                 "password", schedule.getPassword(),
                 "title", schedule.getTitle(),
                 "contents", schedule.getContents(),
-                "updated_date", Timestamp.valueOf(LocalDateTime.now())
+                "updated_date", LocalDate.now()
         );
     }
     private ScheduleResponseDto makeResponseDto(Number key, Schedule schedule){
-        LocalDateTime localDateTime = getUpdatedDate(key.longValue());
+        LocalDate localDate = getUpdatedDate(key.longValue());
         return new ScheduleResponseDto(
                     key.longValue(),
                     schedule.getPublisher(),
                     schedule.getPassword(),
                     schedule.getTitle(),
                     schedule.getContents(),
-                    localDateTime.toLocalDate().toString(),
-                    localDateTime.toLocalTime().toString()
+                    localDate.toString()
                 );
     }
-    private LocalDateTime getUpdatedDate(Long id){
+    private LocalDate getUpdatedDate(Long id){
         String sql =  "SELECT updated_date FROM post WHERE id = ?";
-        return jdbcTemplate.queryForObject(sql, LocalDateTime.class, id);
+        return LocalDate.from(jdbcTemplate.queryForObject(sql, LocalDateTime.class, id));
     }
 }

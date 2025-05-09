@@ -16,7 +16,6 @@ public class Schedule {
     private String title;
     private String contents;
     private String updatedDate;
-    private String updatedTime;
     public Schedule(String publisher, String password, String title, String contents){
         this.publisher = publisher;
         this.password = password;

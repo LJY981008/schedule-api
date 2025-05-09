@@ -16,5 +16,4 @@ public class ScheduleResponseDto {
     private String title;
     private String contents;
     private String updatedDate;
-    private String updatedTime;
 }
