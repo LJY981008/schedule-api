@@ -16,8 +16,14 @@ public class ScheduleController {
     public ScheduleController(ScheduleService scheduleService) {
         this.scheduleService = scheduleService;
     }
+
     @PostMapping
     public ResponseEntity<ScheduleResponseDto> createSchedule(@RequestBody ScheduleRequestDto dto){
         return new ResponseEntity<>(scheduleService.saveSchedule(dto), HttpStatus.CREATED);
+    }
+
+    @RequestMapping("/posts")
+    public ResponseEntity<ScheduleResponseDto> searchPublisherSchedule(@RequestParam String publisher){
+        return new ResponseEntity<>(scheduleService.findScheduleByPublisher(publisher), HttpStatus.OK);
     }
 }

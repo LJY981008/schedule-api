@@ -7,10 +7,10 @@ import org.springframework.jdbc.core.namedparam.MapSqlParameterSource;
 import org.springframework.jdbc.core.simple.SimpleJdbcInsert;
 import org.springframework.stereotype.Repository;
 
-import java.sql.Timestamp;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.util.Map;
+import java.util.Optional;
 
 @Repository
 public class ScheduleRepositoryImpl implements ScheduleRepository {
@@ -21,14 +21,20 @@ public class ScheduleRepositoryImpl implements ScheduleRepository {
     }
 
     @Override
-    public ScheduleResponseDto saveSchedule(Schedule schedule) {
+    public void saveSchedule(Schedule schedule) {
         SimpleJdbcInsert jdbcInsert = new SimpleJdbcInsert(jdbcTemplate);
         jdbcInsert.withTableName("post").usingGeneratedKeyColumns("id");
 
         Map<String, Object> parameters = makeParameters(schedule);
         Number key = jdbcInsert.executeAndReturnKey(new MapSqlParameterSource(parameters));
 
-        return makeResponseDto(key, schedule);
+        schedule.setId(key.longValue());
+        schedule.setUpdatedDate(getUpdatedDate(key.longValue()).toString());
+    }
+
+    @Override
+    public Optional<Schedule> findScheduleByPublisher(String publisher) {
+        return null;
     }
 
     private Map<String, Object> makeParameters(Schedule schedule){
@@ -40,17 +46,7 @@ public class ScheduleRepositoryImpl implements ScheduleRepository {
                 "updated_date", LocalDate.now()
         );
     }
-    private ScheduleResponseDto makeResponseDto(Number key, Schedule schedule){
-        LocalDate localDate = getUpdatedDate(key.longValue());
-        return new ScheduleResponseDto(
-                    key.longValue(),
-                    schedule.getPublisher(),
-                    schedule.getPassword(),
-                    schedule.getTitle(),
-                    schedule.getContents(),
-                    localDate.toString()
-                );
-    }
+
     private LocalDate getUpdatedDate(Long id){
         String sql =  "SELECT updated_date FROM post WHERE id = ?";
         return LocalDate.from(jdbcTemplate.queryForObject(sql, LocalDateTime.class, id));
