@@ -3,10 +3,6 @@ package com.example.scheduleapi.lv1.dto;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 
-import java.time.LocalDate;
-import java.time.LocalDateTime;
-import java.time.LocalTime;
-
 @Getter
 @AllArgsConstructor
 public class ScheduleResponseDto {

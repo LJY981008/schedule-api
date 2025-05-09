@@ -1,11 +1,13 @@
 package com.example.scheduleapi.lv1.repository;
 
 import com.example.scheduleapi.lv1.entity.Schedule;
+import org.springframework.http.HttpStatus;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.jdbc.core.RowMapper;
 import org.springframework.jdbc.core.namedparam.MapSqlParameterSource;
 import org.springframework.jdbc.core.simple.SimpleJdbcInsert;
 import org.springframework.stereotype.Repository;
+import org.springframework.web.server.ResponseStatusException;
 
 import java.sql.ResultSet;
 import java.sql.SQLException;
@@ -14,6 +16,7 @@ import java.time.LocalDateTime;
 import java.sql.Date;
 import java.util.List;
 import java.util.Map;
+import java.util.Optional;
 
 @Repository
 public class ScheduleRepositoryImpl implements ScheduleRepository {
@@ -40,33 +43,26 @@ public class ScheduleRepositoryImpl implements ScheduleRepository {
         return jdbcTemplate.query("SELECT * FROM post WHERE publisher = ? AND updated_date >= ? AND updated_date <= ?", scheduleRowMapper(), publisher, Date.valueOf(startDate), Date.valueOf(endDate));
     }
 
-    private Map<String, Object> makeParameters(Schedule schedule){
-        return Map.of(
-                "publisher", schedule.getPublisher(),
-                "password", schedule.getPassword(),
-                "title", schedule.getTitle(),
-                "contents", schedule.getContents(),
-                "updated_date", LocalDate.now()
-        );
+    @Override
+    public Schedule findScheduleByIdOrElseThrow(Long id) {
+        List<Schedule> result = jdbcTemplate.query("SELECT * FROM post WHERE id = ?", scheduleRowMapper(), id);
+        return result.stream().findAny().orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, "Notting id = " + id));
     }
 
-    private LocalDate getUpdatedDate(Long id){
-        String sql =  "SELECT updated_date FROM post WHERE id = ?";
+    private Map<String, Object> makeParameters(Schedule schedule) {
+        return Map.of("publisher", schedule.getPublisher(), "password", schedule.getPassword(), "title", schedule.getTitle(), "contents", schedule.getContents(), "updated_date", LocalDate.now());
+    }
+
+    private LocalDate getUpdatedDate(Long id) {
+        String sql = "SELECT updated_date FROM post WHERE id = ?";
         return LocalDate.from(jdbcTemplate.queryForObject(sql, LocalDateTime.class, id));
     }
 
-    private RowMapper<Schedule> scheduleRowMapper(){
+    private RowMapper<Schedule> scheduleRowMapper() {
         return new RowMapper<Schedule>() {
             @Override
             public Schedule mapRow(ResultSet rs, int rowNum) throws SQLException {
-                return new Schedule(
-                        rs.getLong("id"),
-                        rs.getString("publisher"),
-                        rs.getString("password"),
-                        rs.getString("title"),
-                        rs.getString("contents"),
-                        rs.getString("updated_date")
-                );
+                return new Schedule(rs.getLong("id"), rs.getString("publisher"), rs.getString("password"), rs.getString("title"), rs.getString("contents"), rs.getString("updated_date"));
             }
         };
     }

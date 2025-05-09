@@ -21,13 +21,18 @@ public class ScheduleController {
     }
 
     @PostMapping
-    public ResponseEntity<ScheduleResponseDto> createSchedule(@RequestBody ScheduleRequestDto dto){
+    public ResponseEntity<ScheduleResponseDto> createSchedule(@RequestBody ScheduleRequestDto dto) {
         return new ResponseEntity<>(scheduleService.saveSchedule(dto), HttpStatus.CREATED);
     }
 
     @GetMapping("/posts")
-    public ResponseEntity<List<ScheduleResponseDto>> readScheduleByPublisherAndDate(@RequestParam String publisher, @RequestParam(defaultValue = "0000-01-01") String startDate, @RequestParam(required = false) String endDate){
-        if(endDate == null || endDate.isBlank()) endDate = LocalDate.now().toString();
+    public ResponseEntity<List<ScheduleResponseDto>> readScheduleByPublisherAndDate(@RequestParam String publisher, @RequestParam(defaultValue = "0001-01-01") String startDate, @RequestParam(required = false) String endDate) {
+        if (endDate == null || endDate.isBlank()) endDate = LocalDate.now().toString();
         return ResponseEntity.ok(scheduleService.filterSchedulesByPublisherAndDate(publisher, startDate, endDate));
+    }
+
+    @GetMapping("/posts/{id}")
+    public ResponseEntity<ScheduleResponseDto> readScheduleById(@PathVariable Long id) {
+        return ResponseEntity.ok(scheduleService.findScheduleById(id));
     }
 }

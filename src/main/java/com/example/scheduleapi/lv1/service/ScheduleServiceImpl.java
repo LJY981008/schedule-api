@@ -42,6 +42,11 @@ public class ScheduleServiceImpl implements ScheduleService {
         return responseDto;
     }
 
+    @Override
+    public ScheduleResponseDto findScheduleById(Long id) {
+        return makeResponseDto(scheduleRepository.findScheduleByIdOrElseThrow(id));
+    }
+
     private ScheduleResponseDto makeResponseDto(Schedule schedule) {
         return new ScheduleResponseDto(schedule.getId(), schedule.getPublisher(), schedule.getPassword(), schedule.getTitle(), schedule.getContents(), schedule.getUpdatedDate());
     }
