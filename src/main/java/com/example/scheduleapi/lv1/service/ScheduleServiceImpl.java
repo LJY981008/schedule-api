@@ -9,6 +9,7 @@ import org.springframework.stereotype.Service;
 import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
+import java.util.Comparator;
 import java.util.List;
 
 @Service
@@ -37,6 +38,7 @@ public class ScheduleServiceImpl implements ScheduleService {
         for (Schedule item : scheduleList) {
             responseDto.add(makeResponseDto(item));
         }
+        responseDto.sort(Comparator.comparing(ScheduleResponseDto::getUpdatedDate).reversed());
         return responseDto;
     }
 
