@@ -7,6 +7,9 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import java.time.LocalDate;
+import java.util.List;
+
 @RestController
 @RequestMapping("/lv1")
 public class ScheduleController {
@@ -22,8 +25,9 @@ public class ScheduleController {
         return new ResponseEntity<>(scheduleService.saveSchedule(dto), HttpStatus.CREATED);
     }
 
-    @RequestMapping("/posts")
-    public ResponseEntity<ScheduleResponseDto> searchPublisherSchedule(@RequestParam String publisher){
-        return new ResponseEntity<>(scheduleService.findScheduleByPublisher(publisher), HttpStatus.OK);
+    @GetMapping("/posts")
+    public ResponseEntity<List<ScheduleResponseDto>> readScheduleByPublisherAndDate(@RequestParam String publisher, @RequestParam(defaultValue = "0000-01-01") String startDate, @RequestParam(required = false) String endDate){
+        if(endDate == null || endDate.isBlank()) endDate = LocalDate.now().toString();
+        return ResponseEntity.ok(scheduleService.filterSchedulesByPublisherAndDate(publisher, startDate, endDate));
     }
 }

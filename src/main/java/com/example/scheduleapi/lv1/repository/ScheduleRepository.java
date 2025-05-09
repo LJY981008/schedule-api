@@ -1,12 +1,11 @@
 package com.example.scheduleapi.lv1.repository;
 
-import com.example.scheduleapi.lv1.dto.ScheduleRequestDto;
-import com.example.scheduleapi.lv1.dto.ScheduleResponseDto;
 import com.example.scheduleapi.lv1.entity.Schedule;
 
-import java.util.Optional;
+import java.time.LocalDate;
+import java.util.List;
 
 public interface ScheduleRepository {
     void saveSchedule(Schedule schedule);
-    Optional<Schedule> findScheduleByPublisher(String publisher);
+    List<Schedule> filterSchedulesByPublisherAndDate(String publisher, LocalDate startDate, LocalDate endDate);
 }
