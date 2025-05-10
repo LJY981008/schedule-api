@@ -1,4 +1,4 @@
-package com.example.scheduleapi.lv1.controller;
+package com.example.scheduleapi.lv2.controller;
 
 import com.example.scheduleapi.lv1.dto.ScheduleRequestDto;
 import com.example.scheduleapi.lv1.dto.ScheduleResponseDto;
@@ -11,7 +11,7 @@ import java.time.LocalDate;
 import java.util.List;
 
 @RestController
-@RequestMapping("/lv1")
+@RequestMapping("/lv2")
 public class ScheduleController {
 
     private final ScheduleService scheduleService;
