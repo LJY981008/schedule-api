@@ -1,6 +1,6 @@
-package com.example.scheduleapi.lv1.repository;
+package com.example.scheduleapi.repository;
 
-import com.example.scheduleapi.lv1.entity.Schedule;
+import com.example.scheduleapi.entity.Schedule;
 import org.springframework.http.HttpStatus;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.jdbc.core.RowMapper;

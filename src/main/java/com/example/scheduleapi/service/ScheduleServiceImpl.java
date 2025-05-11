@@ -1,9 +1,9 @@
-package com.example.scheduleapi.lv1.service;
+package com.example.scheduleapi.service;
 
-import com.example.scheduleapi.lv1.dto.ScheduleRequestDto;
-import com.example.scheduleapi.lv1.dto.ScheduleResponseDto;
-import com.example.scheduleapi.lv1.entity.Schedule;
-import com.example.scheduleapi.lv1.repository.ScheduleRepository;
+import com.example.scheduleapi.dto.ScheduleRequestDto;
+import com.example.scheduleapi.dto.ScheduleResponseDto;
+import com.example.scheduleapi.entity.Schedule;
+import com.example.scheduleapi.repository.ScheduleRepository;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDate;

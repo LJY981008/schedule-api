@@ -1,8 +1,8 @@
-package com.example.scheduleapi.lv1.controller;
+package com.example.scheduleapi.controller;
 
-import com.example.scheduleapi.lv1.dto.ScheduleRequestDto;
-import com.example.scheduleapi.lv1.dto.ScheduleResponseDto;
-import com.example.scheduleapi.lv1.service.ScheduleService;
+import com.example.scheduleapi.dto.ScheduleRequestDto;
+import com.example.scheduleapi.dto.ScheduleResponseDto;
+import com.example.scheduleapi.service.ScheduleService;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -11,7 +11,7 @@ import java.time.LocalDate;
 import java.util.List;
 
 @RestController
-@RequestMapping("/lv1")
+@RequestMapping("/posts")
 public class ScheduleController {
 
     private final ScheduleService scheduleService;
@@ -25,7 +25,7 @@ public class ScheduleController {
         return new ResponseEntity<>(scheduleService.saveSchedule(dto), HttpStatus.CREATED);
     }
 
-    @GetMapping("/posts")
+    @GetMapping
     public ResponseEntity<List<ScheduleResponseDto>> readScheduleByPublisherAndDate(
             @RequestParam String publisher,
             @RequestParam(defaultValue = "0001-01-01") String startDate,
@@ -35,8 +35,8 @@ public class ScheduleController {
         return ResponseEntity.ok(scheduleService.filterSchedulesByPublisherAndDate(publisher, startDate, endDate));
     }
 
-    @GetMapping("/posts/{id}")
-    public ResponseEntity<ScheduleResponseDto> readScheduleById(@PathVariable Long id) {
+    @GetMapping("/{id}")
+        public ResponseEntity<ScheduleResponseDto> readScheduleById(@PathVariable Long id) {
         return ResponseEntity.ok(scheduleService.findScheduleById(id));
     }
 }

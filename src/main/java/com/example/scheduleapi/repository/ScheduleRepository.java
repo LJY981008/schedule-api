@@ -1,6 +1,6 @@
-package com.example.scheduleapi.lv1.repository;
+package com.example.scheduleapi.repository;
 
-import com.example.scheduleapi.lv1.entity.Schedule;
+import com.example.scheduleapi.entity.Schedule;
 
 import java.time.LocalDate;
 import java.util.List;

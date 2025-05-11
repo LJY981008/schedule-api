@@ -1,7 +1,7 @@
-package com.example.scheduleapi.lv1.service;
+package com.example.scheduleapi.service;
 
-import com.example.scheduleapi.lv1.dto.ScheduleRequestDto;
-import com.example.scheduleapi.lv1.dto.ScheduleResponseDto;
+import com.example.scheduleapi.dto.ScheduleRequestDto;
+import com.example.scheduleapi.dto.ScheduleResponseDto;
 
 import java.util.List;
 
