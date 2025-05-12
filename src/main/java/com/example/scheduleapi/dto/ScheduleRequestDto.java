@@ -2,6 +2,7 @@ package com.example.scheduleapi.dto;
 
 import jakarta.validation.constraints.AssertTrue;
 import jakarta.validation.constraints.NotBlank;
+import jakarta.validation.constraints.NotNull;
 import lombok.Getter;
 
 @Getter
@@ -9,13 +10,19 @@ public class ScheduleRequestDto {
 
     @NotBlank
     private String password;
+    @NotNull
+    private Long user_id;
+    private String name;
+    private String email;
     private String publisher;
     private String title;
     private String contents;
 
-    @AssertTrue(message = "publisher, title, contents 중 최소 1개의 데이터가 필요합니다.")
+    @AssertTrue(message = "입력을 확인해주세요")
     public boolean isUpdatePostValid() {
         if (title != null) return false;
         return publisher != null || contents != null;
     }
+
+
 }

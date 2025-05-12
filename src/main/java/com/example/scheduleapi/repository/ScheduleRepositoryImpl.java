@@ -1,6 +1,7 @@
 package com.example.scheduleapi.repository;
 
 import com.example.scheduleapi.entity.Schedule;
+import com.example.scheduleapi.entity.User;
 import org.springframework.http.HttpStatus;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.jdbc.core.RowMapper;
@@ -16,6 +17,7 @@ import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.util.List;
 import java.util.Map;
+import java.util.Optional;
 
 @Repository
 public class ScheduleRepositoryImpl implements ScheduleRepository {
@@ -26,26 +28,34 @@ public class ScheduleRepositoryImpl implements ScheduleRepository {
     }
 
     @Override
-    public void saveSchedule(Schedule schedule) {
+    public void saveSchedule(Schedule schedule, Long user_id) {
         SimpleJdbcInsert jdbcInsert = new SimpleJdbcInsert(jdbcTemplate);
         jdbcInsert.withTableName("post").usingGeneratedKeyColumns("id");
 
-        Map<String, Object> parameters = makeParameters(schedule);
+        Map<String, Object> parameters = makeParameters(schedule, user_id);
         Number key = jdbcInsert.executeAndReturnKey(new MapSqlParameterSource(parameters));
 
         schedule.setId(key.longValue());
         schedule.setUpdatedDate(getUpdatedDate(key.longValue()).toString());
     }
-
     @Override
-    public List<Schedule> filterSchedulesByPublisherAndDate(String publisher, LocalDate startDate, LocalDate endDate) {
-        return jdbcTemplate.query("SELECT * FROM post WHERE publisher = ? AND updated_date >= ? AND updated_date <= ?", scheduleRowMapper(), publisher, Date.valueOf(startDate), Date.valueOf(endDate));
+    public void saveUser(User user) {
+        SimpleJdbcInsert jdbcInsert = new SimpleJdbcInsert(jdbcTemplate);
+        jdbcInsert.withTableName("user").usingGeneratedKeyColumns("user_id");
+
+        Map<String, Object> parameters = makeParameters(user);
+        jdbcInsert.executeAndReturnKey(new MapSqlParameterSource(parameters));
     }
 
     @Override
-    public Schedule findScheduleByIdOrElseThrow(Long id) {
-        List<Schedule> result = jdbcTemplate.query("SELECT * FROM post WHERE id = ?", scheduleRowMapper(), id);
-        return result.stream().findAny().orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, "Notting id = " + id));
+    public List<Schedule> filterSchedulesByPublisherAndDate(Long user_id, LocalDate startDate, LocalDate endDate) {
+        return jdbcTemplate.query("SELECT * FROM post WHERE user_id = ? AND updated_date >= ? AND updated_date <= ?", scheduleRowMapper(), user_id, Date.valueOf(startDate), Date.valueOf(endDate));
+    }
+
+    @Override
+    public Schedule findScheduleByIdOrElseThrow(Long user_id) {
+        List<Schedule> result = jdbcTemplate.query("SELECT * FROM post WHERE user_id = ?", scheduleRowMapper(), user_id);
+        return result.stream().findAny().orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, "Notting id = " + user_id));
     }
 
     @Override
@@ -61,14 +71,25 @@ public class ScheduleRepositoryImpl implements ScheduleRepository {
     }
 
     @Override
-    public Object getDataOrElseThrow(String key, Long id) {
+    public Object findScheduleByColumnKeyAndIdOrElseThrow(String key, Long id) {
+        String sql = "SELECT " + key + " FROM post WHERE id = ?";
         List<Object> result = jdbcTemplate.query(
-                "SELECT ? FROM post WHERE id = ?",
-                (rs, rowNum) -> rs.getString(key),
-                key,
+                sql,
+                (rs, rowNum) -> rs.getString(1),
                 id
         );
         return result.stream().findAny().orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, "Notting id = " + id));
+    }
+
+    @Override
+    public Optional<Object> findUserByColumnKeyAndId(String key, Long user_id) {
+        List<Object> result = jdbcTemplate.query(
+                "SELECT ? FROM user WHERE user_id = ?",
+                (rs, rowNum) -> rs.getString(key),
+                key,
+                user_id
+        );
+        return result.stream().findAny();
     }
 
     @Override
@@ -76,8 +97,12 @@ public class ScheduleRepositoryImpl implements ScheduleRepository {
         return jdbcTemplate.update("delete from post where id = ?", id);
     }
 
-    private Map<String, Object> makeParameters(Schedule schedule) {
-        return Map.of("publisher", schedule.getPublisher(), "password", schedule.getPassword(), "title", schedule.getTitle(), "contents", schedule.getContents(), "updated_date", LocalDate.now());
+    private Map<String, Object> makeParameters(Schedule schedule, Long user_id) {
+        return Map.of("user_id",user_id,"publisher", schedule.getPublisher(), "password", schedule.getPassword(), "title", schedule.getTitle(), "contents", schedule.getContents(), "updated_date", LocalDate.now());
+    }
+
+    private Map<String, Object> makeParameters(User user) {
+        return Map.of("user_id", user.getUser_id(), "name", user.getPublisher(), "email", user.getEmail(), "registration_date", LocalDate.now(), "modification_date", LocalDate.now());
     }
 
     private LocalDate getUpdatedDate(Long id) {
@@ -89,7 +114,7 @@ public class ScheduleRepositoryImpl implements ScheduleRepository {
         return new RowMapper<Schedule>() {
             @Override
             public Schedule mapRow(ResultSet rs, int rowNum) throws SQLException {
-                return new Schedule(rs.getLong("id"), rs.getString("publisher"), rs.getString("password"), rs.getString("title"), rs.getString("contents"), rs.getString("updated_date"));
+                return new Schedule(rs.getLong("id"), rs.getLong("user_id"), rs.getString("publisher"), rs.getString("password"), rs.getString("title"), rs.getString("contents"), rs.getString("updated_date"));
             }
         };
     }

@@ -26,18 +26,21 @@ public class ScheduleController {
     }
 
     @PostMapping
-    public ResponseEntity<ScheduleResponseDto> createSchedule(@RequestBody ScheduleRequestDto dto) {
+    public ResponseEntity<ScheduleResponseDto> createSchedule(
+            @Valid @RequestBody ScheduleRequestDto dto,
+            BindingResult bindingResult) {
+        validateInput(bindingResult);
         return new ResponseEntity<>(scheduleService.saveSchedule(dto), HttpStatus.CREATED);
     }
 
     @GetMapping
     public ResponseEntity<List<ScheduleResponseDto>> readScheduleByPublisherAndDate(
-            @RequestParam String publisher,
+            @RequestParam Long user_id,
             @RequestParam(defaultValue = "0001-01-01") String startDate,
             @RequestParam(required = false) String endDate
     ) {
         if (endDate == null || endDate.isBlank()) endDate = LocalDate.now().toString();
-        return ResponseEntity.ok(scheduleService.filterSchedulesByPublisherAndDate(publisher, startDate, endDate));
+        return ResponseEntity.ok(scheduleService.filterSchedulesByUserIdAndDate(user_id, startDate, endDate));
     }
 
     @GetMapping("/{id}")
@@ -50,14 +53,8 @@ public class ScheduleController {
             @Valid @RequestBody ScheduleRequestDto requestDto,
             @PathVariable Long id,
             BindingResult bindingResult) {
-        if (bindingResult.hasErrors()) {
-            Map<String, String> errors = new HashMap<>();
-            bindingResult.getFieldErrors().forEach(error ->
-                    errors.put(error.getField(), error.getDefaultMessage()));
-            throw new ValidationException(errors, "유효성 검사 실패");
-        }
+        validateInput(bindingResult);
         scheduleService.updateSchedule(requestDto, id);
-
         return new ResponseEntity<>("업데이트 성공", HttpStatus.OK);
     }
 
@@ -67,5 +64,13 @@ public class ScheduleController {
         return new ResponseEntity<>(HttpStatus.OK);
     }
 
+    private void validateInput(BindingResult bindingResult){
+        if (bindingResult.hasErrors()) {
+            Map<String, String> errors = new HashMap<>();
+            bindingResult.getFieldErrors().forEach(error ->
+                    errors.put(error.getField(), error.getDefaultMessage()));
+            throw new ValidationException(errors, "유효성 검사 실패");
+        }
+    }
 
 }

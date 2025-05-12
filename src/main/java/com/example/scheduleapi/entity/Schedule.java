@@ -9,6 +9,7 @@ import lombok.Setter;
 public class Schedule {
     @Setter
     private Long id;
+    private Long userId;
     private String publisher;
     private String password;
     private String title;
