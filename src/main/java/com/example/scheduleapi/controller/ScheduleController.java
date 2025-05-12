@@ -58,17 +58,10 @@ public class ScheduleController {
                     errors.put(error.getField(), error.getDefaultMessage()));
             throw new ValidationException(errors, "유효성 검사 실패");
         }
-
+        scheduleService.updateSchedule(requestDto, id);
 
         return new ResponseEntity<>("스케줄 데이터 처리 성공", HttpStatus.OK);
     }
 
-    private Map<String, Object> validRequestToMap(ScheduleRequestDto requestDto){
-        ObjectMapper objectMapper = new ObjectMapper();
-        Map<String, Object> dtoMap = objectMapper.convertValue(requestDto, Map.class);
 
-        return dtoMap.entrySet().stream()
-                .filter(entry -> entry.getValue() != null)
-                .collect(Collectors.toMap(Map.Entry::getKey, Map.Entry::getValue));
-    }
 }

@@ -3,14 +3,16 @@ package com.example.scheduleapi.service;
 import com.example.scheduleapi.dto.ScheduleRequestDto;
 import com.example.scheduleapi.dto.ScheduleResponseDto;
 import com.example.scheduleapi.entity.Schedule;
+import com.example.scheduleapi.exceptions.PasswordMismatchException;
 import com.example.scheduleapi.repository.ScheduleRepository;
+import com.fasterxml.jackson.databind.ObjectMapper;
+import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
-import java.util.ArrayList;
-import java.util.Comparator;
-import java.util.List;
+import java.util.*;
+import java.util.stream.Collectors;
 
 @Service
 public class ScheduleServiceImpl implements ScheduleService {
@@ -47,7 +49,40 @@ public class ScheduleServiceImpl implements ScheduleService {
         return makeResponseDto(scheduleRepository.findScheduleByIdOrElseThrow(id));
     }
 
+    @Override
+    public void updateSchedule(ScheduleRequestDto requestDto, Long id) {
+        if(!requestDto.getPassword().equals(scheduleRepository.getDataOrElseThrow("password", id)))
+            throw new PasswordMismatchException(HttpStatus.BAD_REQUEST, "password가 일치하지 않습니다.");
+        Map<String, Object> validRequestMap = validRequestSetDefault(requestDto, id);
+        scheduleRepository.updateScheduleOrElseThrow(validRequestMap, id);
+    }
+
     private ScheduleResponseDto makeResponseDto(Schedule schedule) {
         return new ScheduleResponseDto(schedule.getId(), schedule.getPublisher(), schedule.getPassword(), schedule.getTitle(), schedule.getContents(), schedule.getUpdatedDate());
     }
+    private Map<String, Object> validRequestSetDefault(ScheduleRequestDto requestDto, Long id) {
+        Map<String, Object> finalData = new HashMap<>(validRequestToMap(requestDto));
+
+        String[] fields = {"publisher", "contents"};
+
+        for (String field : fields) {
+            if (!finalData.containsKey(field)) {
+                Object defaultValue = scheduleRepository.getDataOrElseThrow(field, id);
+                if (defaultValue != null) {
+                    finalData.put(field, defaultValue);
+                }
+            }
+        }
+
+        return finalData;
+    }
+    private Map<String, Object> validRequestToMap(ScheduleRequestDto requestDto){
+        ObjectMapper objectMapper = new ObjectMapper();
+        Map<String, Object> dtoMap = objectMapper.convertValue(requestDto, Map.class);
+
+        return dtoMap.entrySet().stream()
+                .filter(entry -> entry.getValue() != null)
+                .collect(Collectors.toMap(Map.Entry::getKey, Map.Entry::getValue));
+    }
+
 }

@@ -48,6 +48,29 @@ public class ScheduleRepositoryImpl implements ScheduleRepository {
         return result.stream().findAny().orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, "Notting id = " + id));
     }
 
+    @Override
+    public void updateScheduleOrElseThrow(Map<String, Object> scheduleMap, Long id) {
+        int rowsAffected = jdbcTemplate.update(
+                "UPDATE post SET publisher = ?, contents = ?, updated_date = ? WHERE id = ?",
+                scheduleMap.get("publisher"),
+                scheduleMap.get("contents"),
+                LocalDate.now(),
+                id
+        );
+        if(rowsAffected == 0) throw new ResponseStatusException(HttpStatus.NOT_FOUND, "Notting id = " + id);
+    }
+
+    @Override
+    public Object getDataOrElseThrow(String key, Long id) {
+        List<Object> result = jdbcTemplate.query(
+                "SELECT ? FROM post WHERE id = ?",
+                (rs, rowNum) -> rs.getString(key),
+                key,
+                id
+        );
+        return result.stream().findAny().orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, "Notting id = " + id));
+    }
+
     private Map<String, Object> makeParameters(Schedule schedule) {
         return Map.of("publisher", schedule.getPublisher(), "password", schedule.getPassword(), "title", schedule.getTitle(), "contents", schedule.getContents(), "updated_date", LocalDate.now());
     }

@@ -11,4 +11,6 @@ public interface ScheduleService {
     List<ScheduleResponseDto> filterSchedulesByPublisherAndDate(String publisher, String startDate, String endDate);
 
     ScheduleResponseDto findScheduleById(Long id);
+
+    void updateSchedule(ScheduleRequestDto requestDto, Long id);
 }
