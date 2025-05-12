@@ -71,6 +71,11 @@ public class ScheduleRepositoryImpl implements ScheduleRepository {
         return result.stream().findAny().orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, "Notting id = " + id));
     }
 
+    @Override
+    public int deleteSchedule(Long id) {
+        return jdbcTemplate.update("delete from post where id = ?", id);
+    }
+
     private Map<String, Object> makeParameters(Schedule schedule) {
         return Map.of("publisher", schedule.getPublisher(), "password", schedule.getPassword(), "title", schedule.getTitle(), "contents", schedule.getContents(), "updated_date", LocalDate.now());
     }

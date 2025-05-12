@@ -8,6 +8,7 @@ import com.example.scheduleapi.repository.ScheduleRepository;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
+import org.springframework.web.server.ResponseStatusException;
 
 import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
@@ -55,6 +56,14 @@ public class ScheduleServiceImpl implements ScheduleService {
             throw new PasswordMismatchException(HttpStatus.BAD_REQUEST, "password가 일치하지 않습니다.");
         Map<String, Object> validRequestMap = validRequestSetDefault(requestDto, id);
         scheduleRepository.updateScheduleOrElseThrow(validRequestMap, id);
+    }
+
+    @Override
+    public void deleteSchedule(Long id) {
+        int deletedRow = scheduleRepository.deleteSchedule(id);
+        if (deletedRow == 0) {
+            throw new ResponseStatusException(HttpStatus.NOT_FOUND, "Does not exist id = " + id);
+        }
     }
 
     private ScheduleResponseDto makeResponseDto(Schedule schedule) {

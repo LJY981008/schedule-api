@@ -16,4 +16,6 @@ public interface ScheduleRepository {
     void updateScheduleOrElseThrow(Map<String, Object> scheduleMap, Long id);
 
     Object getDataOrElseThrow(String key, Long id);
+
+    int deleteSchedule(Long id);
 }

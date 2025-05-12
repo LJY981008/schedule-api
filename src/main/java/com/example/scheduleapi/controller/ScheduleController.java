@@ -4,7 +4,6 @@ import com.example.scheduleapi.dto.ScheduleRequestDto;
 import com.example.scheduleapi.dto.ScheduleResponseDto;
 import com.example.scheduleapi.exceptions.ValidationException;
 import com.example.scheduleapi.service.ScheduleService;
-import com.fasterxml.jackson.databind.ObjectMapper;
 import jakarta.validation.Valid;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -15,7 +14,6 @@ import java.time.LocalDate;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
-import java.util.stream.Collectors;
 
 @RestController
 @RequestMapping("/posts")
@@ -60,7 +58,13 @@ public class ScheduleController {
         }
         scheduleService.updateSchedule(requestDto, id);
 
-        return new ResponseEntity<>("스케줄 데이터 처리 성공", HttpStatus.OK);
+        return new ResponseEntity<>("업데이트 성공", HttpStatus.OK);
+    }
+
+    @DeleteMapping("/{id}")
+    public ResponseEntity<Void> deleteSchedule(@PathVariable Long id) {
+        scheduleService.deleteSchedule(id);
+        return new ResponseEntity<>(HttpStatus.OK);
     }
 
 
