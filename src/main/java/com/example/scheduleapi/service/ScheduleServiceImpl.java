@@ -27,10 +27,8 @@ public class ScheduleServiceImpl implements ScheduleService {
     @Override
     public ScheduleResponseDto saveSchedule(ScheduleRequestDto dto) {
         Schedule schedule = new Schedule(dto.getPublisher(), dto.getPassword(), dto.getTitle(), dto.getContents());
-        User user = new User(dto.getUser_id(), dto.getPublisher(), dto.getEmail(), dto.getPassword());
-        checkedSignup(user);
 
-        scheduleRepository.saveSchedule(schedule, user.getUser_id());
+        scheduleRepository.saveSchedule(schedule, dto.getUser_id());
         return makeResponseDto(schedule);
     }
 
@@ -97,10 +95,5 @@ public class ScheduleServiceImpl implements ScheduleService {
                 .filter(entry -> entry.getValue() != null)
                 .collect(Collectors.toMap(Map.Entry::getKey, Map.Entry::getValue));
     }
-    private void checkedSignup(User user){
-        Optional<Object> user_id = scheduleRepository.findUserByColumnKeyAndId("user_id", user.getUser_id());
-        if(user_id.isEmpty()){
-            scheduleRepository.saveUser(user);
-        }
-    }
+
 }

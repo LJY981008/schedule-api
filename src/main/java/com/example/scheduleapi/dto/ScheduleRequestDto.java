@@ -12,7 +12,6 @@ public class ScheduleRequestDto {
     private String password;
     @NotNull
     private Long user_id;
-    private String name;
     private String email;
     private String publisher;
     private String title;
@@ -20,7 +19,6 @@ public class ScheduleRequestDto {
 
     @AssertTrue(message = "입력을 확인해주세요")
     public boolean isUpdatePostValid() {
-        if (title != null) return false;
         return publisher != null || contents != null;
     }
 

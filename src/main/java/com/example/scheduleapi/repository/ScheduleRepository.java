@@ -18,10 +18,5 @@ public interface ScheduleRepository {
     void updateScheduleOrElseThrow(Map<String, Object> scheduleMap, Long id);
 
     Object findScheduleByColumnKeyAndIdOrElseThrow(String key, Long id);
-
-    Optional<Object> findUserByColumnKeyAndId(String key, Long user_id);
-
     int deleteSchedule(Long id);
-
-    void saveUser(User user);
 }

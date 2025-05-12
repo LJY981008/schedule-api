@@ -4,6 +4,8 @@ import com.example.scheduleapi.dto.ScheduleRequestDto;
 import com.example.scheduleapi.dto.ScheduleResponseDto;
 import com.example.scheduleapi.exceptions.ValidationException;
 import com.example.scheduleapi.service.ScheduleService;
+import com.example.scheduleapi.service.UserService;
+import com.example.scheduleapi.service.UserServiceImpl;
 import jakarta.validation.Valid;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -20,9 +22,11 @@ import java.util.Map;
 public class ScheduleController {
 
     private final ScheduleService scheduleService;
+    private final UserService userService;
 
-    public ScheduleController(ScheduleService scheduleService) {
+    public ScheduleController(ScheduleService scheduleService, UserService userService) {
         this.scheduleService = scheduleService;
+        this.userService = userService;
     }
 
     @PostMapping
@@ -30,6 +34,7 @@ public class ScheduleController {
             @Valid @RequestBody ScheduleRequestDto dto,
             BindingResult bindingResult) {
         validateInput(bindingResult);
+        userService.checkedSignup(dto);
         return new ResponseEntity<>(scheduleService.saveSchedule(dto), HttpStatus.CREATED);
     }
 

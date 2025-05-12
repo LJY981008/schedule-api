@@ -38,14 +38,6 @@ public class ScheduleRepositoryImpl implements ScheduleRepository {
         schedule.setId(key.longValue());
         schedule.setUpdatedDate(getUpdatedDate(key.longValue()).toString());
     }
-    @Override
-    public void saveUser(User user) {
-        SimpleJdbcInsert jdbcInsert = new SimpleJdbcInsert(jdbcTemplate);
-        jdbcInsert.withTableName("user").usingGeneratedKeyColumns("user_id");
-
-        Map<String, Object> parameters = makeParameters(user);
-        jdbcInsert.executeAndReturnKey(new MapSqlParameterSource(parameters));
-    }
 
     @Override
     public List<Schedule> filterSchedulesByPublisherAndDate(Long user_id, LocalDate startDate, LocalDate endDate) {
@@ -82,27 +74,12 @@ public class ScheduleRepositoryImpl implements ScheduleRepository {
     }
 
     @Override
-    public Optional<Object> findUserByColumnKeyAndId(String key, Long user_id) {
-        List<Object> result = jdbcTemplate.query(
-                "SELECT ? FROM user WHERE user_id = ?",
-                (rs, rowNum) -> rs.getString(key),
-                key,
-                user_id
-        );
-        return result.stream().findAny();
-    }
-
-    @Override
     public int deleteSchedule(Long id) {
         return jdbcTemplate.update("delete from post where id = ?", id);
     }
 
     private Map<String, Object> makeParameters(Schedule schedule, Long user_id) {
         return Map.of("user_id",user_id,"publisher", schedule.getPublisher(), "password", schedule.getPassword(), "title", schedule.getTitle(), "contents", schedule.getContents(), "updated_date", LocalDate.now());
-    }
-
-    private Map<String, Object> makeParameters(User user) {
-        return Map.of("user_id", user.getUser_id(), "name", user.getPublisher(), "email", user.getEmail(), "registration_date", LocalDate.now(), "modification_date", LocalDate.now());
     }
 
     private LocalDate getUpdatedDate(Long id) {
