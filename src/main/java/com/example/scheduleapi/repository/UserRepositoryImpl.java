@@ -20,18 +20,18 @@ public class UserRepositoryImpl implements UserRepository {
     }
 
     @Override
-    public Optional<Object> findUserByColumnKeyAndId(String key, Long user_id) {
+    public Optional<Object> findUserAttributeById(String attributeName, Long userId) {
         List<Object> result = jdbcTemplate.query(
                 "SELECT ? FROM user WHERE user_id = ?",
-                (rs, rowNum) -> rs.getString(key),
-                key,
-                user_id
+                (rs, rowNum) -> rs.getString(attributeName),
+                attributeName,
+                userId
         );
         return result.stream().findAny();
     }
 
     @Override
-    public void saveUser(User user) {
+    public void createUser(User user) {
         SimpleJdbcInsert jdbcInsert = new SimpleJdbcInsert(jdbcTemplate);
         jdbcInsert.withTableName("user").usingGeneratedKeyColumns("user_id");
 
@@ -40,6 +40,6 @@ public class UserRepositoryImpl implements UserRepository {
     }
 
     private Map<String, Object> makeParameters(User user) {
-        return Map.of("user_id", user.getUser_id(), "name", user.getPublisher(), "email", user.getEmail(), "registration_date", LocalDate.now(), "modification_date", LocalDate.now());
+        return Map.of("user_id", user.getUserId(), "name", user.getPublisher(), "email", user.getEmail(), "registration_date", LocalDate.now(), "modification_date", LocalDate.now());
     }
 }

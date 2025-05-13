@@ -8,17 +8,17 @@ import java.util.List;
 import java.util.Map;
 
 public interface ScheduleRepository {
-    void saveSchedule(Schedule schedule, Long user_id);
+    void createSchedule(Schedule schedule, Long userId);
 
-    List<Schedule> filterSchedulesByPublisherAndDate(Long user_id, LocalDate startDate, LocalDate endDate);
+    List<Schedule> findSchedulesByUserAndDateRange(Long userId, LocalDate startDate, LocalDate endDate);
 
-    Schedule findScheduleByIdOrElseThrow(Long user_id);
+    Schedule findScheduleById(Long userId);
 
-    void updateScheduleOrElseThrow(Map<String, Object> scheduleMap, Long id);
+    Object findScheduleByCattributeAndId(String key, Long scheduleId);
 
-    Object findScheduleByColumnKeyAndIdOrElseThrow(String key, Long id);
+    void updateScheduleByIdOrElseThrow(Map<String, Object> scheduleMap, Long scheduleId);
 
-    int deleteSchedule(Long id);
+    void deleteScheduleById(Long scheduleId);
 
     List<Schedule> findSchedulesByPage(Long page, Long size);
 }

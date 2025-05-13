@@ -5,7 +5,7 @@ import com.example.scheduleapi.entity.User;
 import java.util.Optional;
 
 public interface UserRepository {
-    void saveUser(User user);
+    void createUser(User user);
 
-    Optional<Object> findUserByColumnKeyAndId(String key, Long user_id);
+    Optional<Object> findUserAttributeById(String attributeName, Long userId);
 }

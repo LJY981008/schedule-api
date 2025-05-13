@@ -8,12 +8,12 @@ import lombok.Setter;
 @AllArgsConstructor
 public class User {
     @Setter
-    private Long user_id;
+    private Long userId;
     private String publisher;
     private String email;
     private String password;
 
     public boolean isUserId() {
-        return user_id != null;
+        return userId != null;
     }
 }

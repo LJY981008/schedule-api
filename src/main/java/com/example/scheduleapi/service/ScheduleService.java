@@ -6,15 +6,15 @@ import com.example.scheduleapi.dto.ScheduleResponseDto;
 import java.util.List;
 
 public interface ScheduleService {
-    ScheduleResponseDto saveSchedule(ScheduleRequestDto dto);
+    ScheduleResponseDto createSchedule(ScheduleRequestDto dto);
 
-    List<ScheduleResponseDto> filterSchedulesByUserIdAndDate(Long user_id, String startDate, String endDate);
-
-    ScheduleResponseDto findScheduleById(Long user_id);
-
-    void updateSchedule(ScheduleRequestDto requestDto, Long id);
-
-    void deleteSchedule(Long id);
+    List<ScheduleResponseDto> findSchedulesByUserAndDateRange(Long userId, String startDate, String endDate);
 
     List<ScheduleResponseDto> findSchedulesByPage(Long page, Long size);
+
+    ScheduleResponseDto findScheduleByUserId(Long userId);
+
+    void updateScheduleById(ScheduleRequestDto requestDto, Long scheduleId);
+
+    void deleteScheduleById(Long scheduleId);
 }

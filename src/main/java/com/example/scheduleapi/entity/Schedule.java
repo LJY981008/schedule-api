@@ -8,7 +8,7 @@ import lombok.Setter;
 @AllArgsConstructor
 public class Schedule {
     @Setter
-    private Long id;
+    private Long scheduleId;
     private Long userId;
     private String publisher;
     private String password;

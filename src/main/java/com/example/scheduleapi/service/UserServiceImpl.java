@@ -16,11 +16,11 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
-    public void checkedSignup(ScheduleRequestDto dto) {
-        User user = new User(dto.getUser_id(), dto.getPublisher(), dto.getEmail(), dto.getPassword());
-        Optional<Object> user_id = userRepository.findUserByColumnKeyAndId("user_id", user.getUser_id());
-        if (user_id.isEmpty()) {
-            userRepository.saveUser(user);
+    public void registerUserIfNew(ScheduleRequestDto dto) {
+        User user = new User(dto.getUserId(), dto.getPublisher(), dto.getEmail(), dto.getPassword());
+        Optional<Object> userId = userRepository.findUserAttributeById("user_id", user.getUserId());
+        if (userId.isEmpty()) {
+            userRepository.createUser(user);
         }
     }
 }

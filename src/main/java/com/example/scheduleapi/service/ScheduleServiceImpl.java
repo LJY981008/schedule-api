@@ -8,7 +8,6 @@ import com.example.scheduleapi.repository.ScheduleRepository;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
-import org.springframework.web.server.ResponseStatusException;
 
 import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
@@ -24,70 +23,67 @@ public class ScheduleServiceImpl implements ScheduleService {
     }
 
     @Override
-    public ScheduleResponseDto saveSchedule(ScheduleRequestDto dto) {
+    public ScheduleResponseDto createSchedule(ScheduleRequestDto dto) {
         Schedule schedule = new Schedule(dto.getPublisher(), dto.getPassword(), dto.getTitle(), dto.getContents());
 
-        scheduleRepository.saveSchedule(schedule, dto.getUser_id());
-        return makeResponseDto(schedule);
+        scheduleRepository.createSchedule(schedule, dto.getUserId());
+        return convertToResponseDto(schedule);
     }
 
     @Override
-    public List<ScheduleResponseDto> filterSchedulesByUserIdAndDate(Long user_id, String startDate, String endDate) {
+    public List<ScheduleResponseDto> findSchedulesByUserAndDateRange(Long userId, String startDate, String endDate) {
         DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd"); // 요청 파라미터 형식에 맞춰 변경
         LocalDate parsedStartDate = LocalDate.parse(startDate, formatter);
         LocalDate parsedEndDate = LocalDate.parse(endDate, formatter);
-        List<Schedule> scheduleList = scheduleRepository.filterSchedulesByPublisherAndDate(user_id, parsedStartDate, parsedEndDate);
+        List<Schedule> scheduleList = scheduleRepository.findSchedulesByUserAndDateRange(userId, parsedStartDate, parsedEndDate);
 
         List<ScheduleResponseDto> responseDto = new ArrayList<>();
         for (Schedule item : scheduleList) {
-            responseDto.add(makeResponseDto(item));
+            responseDto.add(convertToResponseDto(item));
         }
         responseDto.sort(Comparator.comparing(ScheduleResponseDto::getUpdatedDate).reversed());
         return responseDto;
     }
 
     @Override
-    public ScheduleResponseDto findScheduleById(Long user_id) {
-        return makeResponseDto(scheduleRepository.findScheduleByIdOrElseThrow(user_id));
+    public ScheduleResponseDto findScheduleByUserId(Long userId) {
+        return convertToResponseDto(scheduleRepository.findScheduleById(userId));
     }
 
     @Override
-    public void updateSchedule(ScheduleRequestDto requestDto, Long id) {
-        String password = scheduleRepository.findScheduleByColumnKeyAndIdOrElseThrow("password", id).toString();
+    public void updateScheduleById(ScheduleRequestDto requestDto, Long scheduleId) {
+        String password = scheduleRepository.findScheduleByCattributeAndId("password", scheduleId).toString();
         if (!requestDto.getPassword().equals(password))
             throw new PasswordMismatchException(HttpStatus.BAD_REQUEST, "비밀번호가 일치하지 않습니다.");
-        Map<String, Object> validRequestMap = validRequestSetDefault(requestDto, id);
-        scheduleRepository.updateScheduleOrElseThrow(validRequestMap, id);
+        Map<String, Object> validRequestMap = mergeUpdateRequest(requestDto, scheduleId);
+        scheduleRepository.updateScheduleByIdOrElseThrow(validRequestMap, scheduleId);
     }
 
     @Override
-    public void deleteSchedule(Long id) {
-        int deletedRow = scheduleRepository.deleteSchedule(id);
-        if (deletedRow == 0) {
-            throw new ResponseStatusException(HttpStatus.NOT_FOUND, "Does not exist id = " + id);
-        }
+    public void deleteScheduleById(Long scheduleId) {
+        scheduleRepository.deleteScheduleById(scheduleId);
     }
 
     @Override
     public List<ScheduleResponseDto> findSchedulesByPage(Long page, Long size) {
         List<Schedule> scheduleList = scheduleRepository.findSchedulesByPage(page, size);
         return scheduleList.stream()
-                .map(this::makeResponseDto)
+                .map(this::convertToResponseDto)
                 .collect(Collectors.toList());
     }
 
-    private ScheduleResponseDto makeResponseDto(Schedule schedule) {
-        return new ScheduleResponseDto(schedule.getId(), schedule.getPublisher(), schedule.getPassword(), schedule.getTitle(), schedule.getContents(), schedule.getUpdatedDate());
+    private ScheduleResponseDto convertToResponseDto(Schedule schedule) {
+        return new ScheduleResponseDto(schedule.getScheduleId(), schedule.getPublisher(), schedule.getPassword(), schedule.getTitle(), schedule.getContents(), schedule.getUpdatedDate());
     }
 
-    private Map<String, Object> validRequestSetDefault(ScheduleRequestDto requestDto, Long id) {
-        Map<String, Object> finalData = new HashMap<>(validRequestToMap(requestDto));
+    private Map<String, Object> mergeUpdateRequest(ScheduleRequestDto requestDto, Long id) {
+        Map<String, Object> finalData = new HashMap<>(convertRequestDtoToMap(requestDto));
 
         String[] fields = {"publisher", "contents"};
 
         for (String field : fields) {
             if (!finalData.containsKey(field)) {
-                Object defaultValue = scheduleRepository.findScheduleByColumnKeyAndIdOrElseThrow(field, id);
+                Object defaultValue = scheduleRepository.findScheduleByCattributeAndId(field, id);
                 if (defaultValue != null) {
                     finalData.put(field, defaultValue);
                 }
@@ -96,7 +92,7 @@ public class ScheduleServiceImpl implements ScheduleService {
         return finalData;
     }
 
-    private Map<String, Object> validRequestToMap(ScheduleRequestDto requestDto) {
+    private Map<String, Object> convertRequestDtoToMap(ScheduleRequestDto requestDto) {
         ObjectMapper objectMapper = new ObjectMapper();
         Map<String, Object> dtoMap = objectMapper.convertValue(requestDto, Map.class);
 
