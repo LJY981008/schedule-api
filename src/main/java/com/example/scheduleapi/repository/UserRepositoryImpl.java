@@ -36,10 +36,12 @@ public class UserRepositoryImpl implements UserRepository {
      * @param userId        조회할 사용자의 ID
      * @return 조회된 속성 값
      */
+    //TODO 컬럼명을 직접적으로 삽입하는 것은 보안에 취약하므로 검수과정 추가가 필요하다
     @Override
     public Optional<Object> findUserAttributeById(String attributeName, Long userId) {
+        String sql = "SELECT " + attributeName + " FROM user WHERE user_id = ?";
         List<Object> result = jdbcTemplate.query(
-                "SELECT ? FROM user WHERE user_id = ?",
+                sql,
                 (rs, rowNum) -> rs.getString(attributeName),
                 attributeName,
                 userId

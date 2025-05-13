@@ -96,7 +96,7 @@ public class ScheduleController {
      * @throws ValidationException 요청 데이터 유효성 검사 실패 시 실행
      */
     @PutMapping("/{scheduleId}")
-    public ResponseEntity<String> updateSchedule(@Valid @RequestBody ScheduleRequestDto requestDto, @PathVariable Long scheduleId, BindingResult bindingResult) {
+    public ResponseEntity<String> updateSchedule(@Valid @RequestBody ScheduleRequestDto requestDto, BindingResult bindingResult, @PathVariable Long scheduleId) {
         handleValidationErrors(bindingResult);
         scheduleService.updateScheduleById(requestDto, scheduleId);
         return ResponseEntity.ok("업데이트 성공");

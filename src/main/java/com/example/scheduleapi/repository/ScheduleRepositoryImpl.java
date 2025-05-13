@@ -111,6 +111,7 @@ public class ScheduleRepositoryImpl implements ScheduleRepository {
      * @return 조회된 속성 값
      * @throws InvalidScheduleIdException 해당 ID의 스케줄이 없을 경우 실행
      */
+    //TODO 컬럼명을 직접적으로 삽입하는 것은 보안에 취약하므로 검수과정 추가가 필요하다
     @Override
     public Object findScheduleByAttributeAndId(String attributeName, Long scheduleId) {
         String sql = "SELECT " + attributeName + " FROM post WHERE id = ?";
