@@ -12,6 +12,7 @@ public class ValidationException extends ResponseStatusException {
         super(HttpStatus.BAD_REQUEST, message);
         this.errors = errors;
     }
+
     public Map<String, String> getErrors() {
         return errors;
     }

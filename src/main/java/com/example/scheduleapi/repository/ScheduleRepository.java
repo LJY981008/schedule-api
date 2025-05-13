@@ -1,12 +1,11 @@
 package com.example.scheduleapi.repository;
 
 import com.example.scheduleapi.entity.Schedule;
-import com.example.scheduleapi.entity.User;
+
 
 import java.time.LocalDate;
 import java.util.List;
 import java.util.Map;
-import java.util.Optional;
 
 public interface ScheduleRepository {
     void saveSchedule(Schedule schedule, Long user_id);

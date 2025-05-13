@@ -1,7 +1,6 @@
 package com.example.scheduleapi.repository;
 
 import com.example.scheduleapi.entity.Schedule;
-import com.example.scheduleapi.entity.User;
 import org.springframework.http.HttpStatus;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.jdbc.core.RowMapper;
@@ -17,7 +16,6 @@ import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.util.List;
 import java.util.Map;
-import java.util.Optional;
 
 @Repository
 public class ScheduleRepositoryImpl implements ScheduleRepository {
@@ -59,7 +57,7 @@ public class ScheduleRepositoryImpl implements ScheduleRepository {
                 LocalDate.now(),
                 id
         );
-        if(rowsAffected == 0) throw new ResponseStatusException(HttpStatus.NOT_FOUND, "Notting id = " + id);
+        if (rowsAffected == 0) throw new ResponseStatusException(HttpStatus.NOT_FOUND, "Notting id = " + id);
     }
 
     @Override
@@ -85,7 +83,7 @@ public class ScheduleRepositoryImpl implements ScheduleRepository {
     }
 
     private Map<String, Object> makeParameters(Schedule schedule, Long user_id) {
-        return Map.of("user_id",user_id,"publisher", schedule.getPublisher(), "password", schedule.getPassword(), "title", schedule.getTitle(), "contents", schedule.getContents(), "updated_date", LocalDate.now());
+        return Map.of("user_id", user_id, "publisher", schedule.getPublisher(), "password", schedule.getPassword(), "title", schedule.getTitle(), "contents", schedule.getContents(), "updated_date", LocalDate.now());
     }
 
     private LocalDate getUpdatedDate(Long id) {

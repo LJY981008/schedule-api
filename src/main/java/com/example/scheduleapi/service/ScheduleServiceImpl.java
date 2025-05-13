@@ -3,7 +3,6 @@ package com.example.scheduleapi.service;
 import com.example.scheduleapi.dto.ScheduleRequestDto;
 import com.example.scheduleapi.dto.ScheduleResponseDto;
 import com.example.scheduleapi.entity.Schedule;
-import com.example.scheduleapi.entity.User;
 import com.example.scheduleapi.exceptions.PasswordMismatchException;
 import com.example.scheduleapi.repository.ScheduleRepository;
 import com.fasterxml.jackson.databind.ObjectMapper;
@@ -55,7 +54,7 @@ public class ScheduleServiceImpl implements ScheduleService {
     @Override
     public void updateSchedule(ScheduleRequestDto requestDto, Long id) {
         String password = scheduleRepository.findScheduleByColumnKeyAndIdOrElseThrow("password", id).toString();
-        if(!requestDto.getPassword().equals(password))
+        if (!requestDto.getPassword().equals(password))
             throw new PasswordMismatchException(HttpStatus.BAD_REQUEST, "비밀번호가 일치하지 않습니다.");
         Map<String, Object> validRequestMap = validRequestSetDefault(requestDto, id);
         scheduleRepository.updateScheduleOrElseThrow(validRequestMap, id);
@@ -80,6 +79,7 @@ public class ScheduleServiceImpl implements ScheduleService {
     private ScheduleResponseDto makeResponseDto(Schedule schedule) {
         return new ScheduleResponseDto(schedule.getId(), schedule.getPublisher(), schedule.getPassword(), schedule.getTitle(), schedule.getContents(), schedule.getUpdatedDate());
     }
+
     private Map<String, Object> validRequestSetDefault(ScheduleRequestDto requestDto, Long id) {
         Map<String, Object> finalData = new HashMap<>(validRequestToMap(requestDto));
 
@@ -95,7 +95,8 @@ public class ScheduleServiceImpl implements ScheduleService {
         }
         return finalData;
     }
-    private Map<String, Object> validRequestToMap(ScheduleRequestDto requestDto){
+
+    private Map<String, Object> validRequestToMap(ScheduleRequestDto requestDto) {
         ObjectMapper objectMapper = new ObjectMapper();
         Map<String, Object> dtoMap = objectMapper.convertValue(requestDto, Map.class);
 

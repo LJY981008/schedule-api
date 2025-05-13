@@ -1,6 +1,5 @@
 package com.example.scheduleapi.entity;
 
-
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.Setter;
@@ -14,7 +13,7 @@ public class User {
     private String email;
     private String password;
 
-    public boolean isUserId(){
+    public boolean isUserId() {
         return user_id != null;
     }
 }
