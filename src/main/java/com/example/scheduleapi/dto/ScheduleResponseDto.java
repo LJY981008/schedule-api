@@ -3,6 +3,9 @@ package com.example.scheduleapi.dto;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 
+/**
+ * 스케줄 정보를 응답으로 반환할 때 사용되는 DTO 클래스
+ */
 @Getter
 @AllArgsConstructor
 public class ScheduleResponseDto {
