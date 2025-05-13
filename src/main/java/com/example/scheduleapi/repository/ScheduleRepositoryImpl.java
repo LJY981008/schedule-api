@@ -39,7 +39,7 @@ public class ScheduleRepositoryImpl implements ScheduleRepository {
     @Override
     public void createSchedule(Schedule schedule, Long userId) {
         SimpleJdbcInsert jdbcInsert = new SimpleJdbcInsert(jdbcTemplate);
-        jdbcInsert.withTableName("post").usingGeneratedKeyColumns("id");
+        jdbcInsert.withTableName("post").usingGeneratedKeyColumns("user_id");
 
         Map<String, Object> parameters = makeParameters(schedule, userId);
         Number key = jdbcInsert.executeAndReturnKey(new MapSqlParameterSource(parameters));

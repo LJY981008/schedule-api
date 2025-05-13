@@ -39,7 +39,6 @@ public class UserRepositoryImpl implements UserRepository {
         List<Object> result = jdbcTemplate.query(
                 sql,
                 (rs, rowNum) -> rs.getString(attributeName),
-                attributeName,
                 userId
         );
         return result.stream().findAny();

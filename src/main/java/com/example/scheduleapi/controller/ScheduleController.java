@@ -4,7 +4,6 @@ import com.example.scheduleapi.dto.ScheduleRequestDto;
 import com.example.scheduleapi.dto.ScheduleResponseDto;
 import com.example.scheduleapi.exceptions.ValidationException;
 import com.example.scheduleapi.service.ScheduleService;
-import com.example.scheduleapi.service.UserService;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
@@ -37,9 +36,9 @@ public class ScheduleController {
      * @throws ValidationException 요청 데이터 유효성 검사 실패 시 실행
      */
     @PostMapping
-    public ResponseEntity<ScheduleResponseDto> createSchedule(@Valid @RequestBody ScheduleRequestDto dto, BindingResult bindingResult) {
+    public ResponseEntity<ScheduleResponseDto> createSchedule(
+            @Valid @RequestBody ScheduleRequestDto dto, BindingResult bindingResult) {
         handleValidationErrors(bindingResult);
-
         return ResponseEntity.status(HttpStatus.CREATED).body(scheduleService.createSchedule(dto));
     }
 
@@ -53,7 +52,7 @@ public class ScheduleController {
      * @return 조회된 스케줄 목록 (200 OK)
      */
     @GetMapping
-    public ResponseEntity<List<ScheduleResponseDto>> getSchedulesByUserAndDateRange(@RequestParam Long userId, @RequestParam(defaultValue = "0001-01-01") String startDate, @RequestParam(required = false) String endDate) {
+    public ResponseEntity<List<ScheduleResponseDto>> getSchedulesByUserAndDateRange(@RequestParam Long userId, @RequestParam(required = false, defaultValue = "0001-01-01") String startDate, @RequestParam(required = false) String endDate) {
         if (endDate == null || endDate.isBlank()) endDate = LocalDate.now().toString();
         return ResponseEntity.ok(scheduleService.findSchedulesByUserAndDateRange(userId, startDate, endDate));
     }
