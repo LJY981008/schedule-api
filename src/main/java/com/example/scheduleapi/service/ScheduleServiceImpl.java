@@ -6,8 +6,10 @@ import com.example.scheduleapi.entity.Schedule;
 import com.example.scheduleapi.exceptions.PasswordMismatchException;
 import com.example.scheduleapi.repository.ScheduleRepository;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
@@ -17,14 +19,13 @@ import java.util.stream.Collectors;
 /**
  * {@link ScheduleService} 인터페이스의 구현체로, 스케줄 관련 비즈니스 로직을 처리
  */
+
 @Service
+@RequiredArgsConstructor
 public class ScheduleServiceImpl implements ScheduleService {
 
     private final ScheduleRepository scheduleRepository;
-
-    public ScheduleServiceImpl(ScheduleRepository scheduleRepository) {
-        this.scheduleRepository = scheduleRepository;
-    }
+    private final UserService userService;
 
     /**
      * 새로운 스케줄을 생성하고 저장한 후, 응답 DTO를 반환
@@ -33,8 +34,10 @@ public class ScheduleServiceImpl implements ScheduleService {
      * @return 생성된 스케줄 정보를 담은 {@link ScheduleResponseDto}
      */
     @Override
+    @Transactional
     public ScheduleResponseDto createSchedule(ScheduleRequestDto dto) {
         Schedule schedule = new Schedule(dto.getPublisher(), dto.getPassword(), dto.getTitle(), dto.getContents());
+        userService.registerUserIfNew(dto);
         scheduleRepository.createSchedule(schedule, dto.getUserId());
         return convertToResponseDto(schedule);
     }
@@ -48,6 +51,7 @@ public class ScheduleServiceImpl implements ScheduleService {
      * @return 조회된 스케줄 목록을 담은 {@link ScheduleResponseDto} 리스트 (수정일 내림차순 정렬)
      */
     @Override
+    @Transactional(readOnly = true)
     public List<ScheduleResponseDto> findSchedulesByUserAndDateRange(Long userId, String startDate, String endDate) {
         DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd");
         LocalDate parsedStartDate = LocalDate.parse(startDate, formatter);
@@ -67,6 +71,7 @@ public class ScheduleServiceImpl implements ScheduleService {
      * @return 조회된 스케줄 정보를 담은 {@link ScheduleResponseDto}
      */
     @Override
+    @Transactional(readOnly = true)
     public ScheduleResponseDto findScheduleByUserId(Long userId) {
         return convertToResponseDto(scheduleRepository.findScheduleById(userId));
     }
@@ -80,6 +85,7 @@ public class ScheduleServiceImpl implements ScheduleService {
      * @throws PasswordMismatchException 비밀번호가 일치하지 않을 경우 실행
      */
     @Override
+    @Transactional
     public void updateScheduleById(ScheduleRequestDto requestDto, Long scheduleId) {
         validatePassword(scheduleId, requestDto.getPassword());
         Map<String, Object> validRequestMap = mergeUpdateRequest(requestDto, scheduleId);
@@ -95,6 +101,7 @@ public class ScheduleServiceImpl implements ScheduleService {
      * @throws PasswordMismatchException 비밀번호가 일치하지 않을 경우 실행
      */
     @Override
+    @Transactional
     public void deleteScheduleById(Long scheduleId, String password) {
         validatePassword(scheduleId, password);
         scheduleRepository.deleteScheduleById(scheduleId);
@@ -108,6 +115,7 @@ public class ScheduleServiceImpl implements ScheduleService {
      * @return 조회된 스케줄 목록을 담은 {@link ScheduleResponseDto} 리스트
      */
     @Override
+    @Transactional(readOnly = true)
     public List<ScheduleResponseDto> findSchedulesByPage(Long page, Long size) {
         List<Schedule> scheduleList = scheduleRepository.findSchedulesByPage(page, size);
         return scheduleList.stream()

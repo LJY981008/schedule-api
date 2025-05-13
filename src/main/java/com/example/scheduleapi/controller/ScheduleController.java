@@ -6,6 +6,7 @@ import com.example.scheduleapi.exceptions.ValidationException;
 import com.example.scheduleapi.service.ScheduleService;
 import com.example.scheduleapi.service.UserService;
 import jakarta.validation.Valid;
+import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.validation.BindingResult;
@@ -21,15 +22,10 @@ import java.util.Map;
  */
 @RestController
 @RequestMapping("/schedules")
+@RequiredArgsConstructor
 public class ScheduleController {
 
     private final ScheduleService scheduleService;
-    private final UserService userService;
-
-    public ScheduleController(ScheduleService scheduleService, UserService userService) {
-        this.scheduleService = scheduleService;
-        this.userService = userService;
-    }
 
     /**
      * 새로운 스케줄을 생성하고 등록
@@ -43,7 +39,7 @@ public class ScheduleController {
     @PostMapping
     public ResponseEntity<ScheduleResponseDto> createSchedule(@Valid @RequestBody ScheduleRequestDto dto, BindingResult bindingResult) {
         handleValidationErrors(bindingResult);
-        userService.registerUserIfNew(dto);
+
         return ResponseEntity.status(HttpStatus.CREATED).body(scheduleService.createSchedule(dto));
     }
 

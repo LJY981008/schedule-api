@@ -2,6 +2,7 @@ package com.example.scheduleapi.repository;
 
 import com.example.scheduleapi.entity.Schedule;
 import com.example.scheduleapi.exceptions.InvalidScheduleIdException;
+import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.jdbc.core.RowMapper;
@@ -20,14 +21,11 @@ import java.util.Map;
 /**
  * {@link ScheduleRepository} 인터페이스의 구현체 JDBC를 사용하여 스케줄 데이터를 관리
  */
+@RequiredArgsConstructor
 @Repository
 public class ScheduleRepositoryImpl implements ScheduleRepository {
 
     private final JdbcTemplate jdbcTemplate;
-
-    public ScheduleRepositoryImpl(JdbcTemplate jdbcTemplate) {
-        this.jdbcTemplate = jdbcTemplate;
-    }
 
     /**
      * {@inheritDoc}

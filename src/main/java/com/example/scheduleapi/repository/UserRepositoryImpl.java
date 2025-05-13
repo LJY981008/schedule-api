@@ -1,8 +1,7 @@
 package com.example.scheduleapi.repository;
 
 import com.example.scheduleapi.entity.User;
-import com.example.scheduleapi.exceptions.InvalidUserIdException;
-import org.springframework.http.HttpStatus;
+import lombok.RequiredArgsConstructor;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.jdbc.core.namedparam.MapSqlParameterSource;
 import org.springframework.jdbc.core.simple.SimpleJdbcInsert;
@@ -18,13 +17,10 @@ import java.util.Optional;
  * JDBC를 사용하여 사용자 데이터를 관리
  */
 @Repository
+@RequiredArgsConstructor
 public class UserRepositoryImpl implements UserRepository {
 
     private final JdbcTemplate jdbcTemplate;
-
-    public UserRepositoryImpl(JdbcTemplate jdbcTemplate) {
-        this.jdbcTemplate = jdbcTemplate;
-    }
 
     /**
      * {@inheritDoc}
