@@ -31,9 +31,8 @@ public class UserServiceImpl implements UserService {
     @Override
     public void registerUserIfNew(ScheduleRequestDto dto) {
         User user = new User(dto.getUserId(), dto.getPublisher(), dto.getEmail(), dto.getPassword());
-        Optional<Object> existingUserId = userRepository.findUserAttributeByIdOrElseThrow("user_id", user.getUserId());
-        if (existingUserId.isEmpty()) {
+        Optional<Object> findUserId = userRepository.findUserAttributeById("user_id", user.getUserId());
+        if(findUserId.isEmpty())
             userRepository.createUser(user);
-        }
     }
 }

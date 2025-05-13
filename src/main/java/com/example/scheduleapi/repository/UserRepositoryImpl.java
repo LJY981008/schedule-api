@@ -11,6 +11,7 @@ import org.springframework.stereotype.Repository;
 import java.time.LocalDate;
 import java.util.List;
 import java.util.Map;
+import java.util.Optional;
 
 /**
  * {@link UserRepository} 인터페이스의 구현체
@@ -36,14 +37,14 @@ public class UserRepositoryImpl implements UserRepository {
      * @return 조회된 속성 값
      */
     @Override
-    public Object findUserAttributeByIdOrElseThrow(String attributeName, Long userId) {
+    public Optional<Object> findUserAttributeById(String attributeName, Long userId) {
         List<Object> result = jdbcTemplate.query(
                 "SELECT ? FROM user WHERE user_id = ?",
                 (rs, rowNum) -> rs.getString(attributeName),
                 attributeName,
                 userId
         );
-        return result.stream().findAny().orElseThrow(() -> new InvalidUserIdException(HttpStatus.NOT_FOUND, "not found user ID: " + userId));
+        return result.stream().findAny();
     }
 
     /**

@@ -14,7 +14,7 @@ public interface ScheduleRepository {
     /**
      * 새로운 스케줄 정보를 데이터베이스에 생성
      *
-     * @param schedule 생성할 스케줄 엔티티
+     * @param schedule 생성할 스케줄 Entity
      * @param userId   스케줄을 생성하는 사용자의 ID
      */
     void createSchedule(Schedule schedule, Long userId);
@@ -34,7 +34,7 @@ public interface ScheduleRepository {
      *
      * @param page 조회할 페이지 번호 (0부터 시작)
      * @param size 한 페이지당 보여줄 스케줄 개수
-     * @return 조회된 스케줄 엔티티 리스트
+     * @return 조회된 스케줄 Entity 리스트
      */
     List<Schedule> findSchedulesByPage(Long page, Long size);
 
@@ -47,7 +47,7 @@ public interface ScheduleRepository {
     Schedule findScheduleById(Long userId);
 
     /**
-     * 특정 ID의 스케줄 정보에서 주어진 속성(컬럼)의 값을 조회
+     * 특정 ID의 스케줄 정보에서 주어진 속성의 값을 조회
      *
      * @param key        조회할 속성의 이름
      * @param scheduleId 조회할 스케줄의 ID
@@ -57,7 +57,7 @@ public interface ScheduleRepository {
 
     /**
      * 특정 ID의 스케줄 정보를 업데이트
-     * 업데이트에 실패하면 예외 발생
+     * 업데이트에 실패하면 예외 실행
      *
      * @param scheduleMap 업데이트할 속성-값 Map
      * @param scheduleId  업데이트할 스케줄의 ID

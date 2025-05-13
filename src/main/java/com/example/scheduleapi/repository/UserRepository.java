@@ -2,6 +2,8 @@ package com.example.scheduleapi.repository;
 
 import com.example.scheduleapi.entity.User;
 
+import java.util.Optional;
+
 /**
  * 사용자 데이터 접근을 위한 Repository 인터페이스
  */
@@ -21,5 +23,5 @@ public interface UserRepository {
      * @param userId        조회할 사용자의 ID
      * @return 조회된 속성 값
      */
-    Object findUserAttributeByIdOrElseThrow(String attributeName, Long userId);
+    Optional<Object> findUserAttributeById(String attributeName, Long userId);
 }

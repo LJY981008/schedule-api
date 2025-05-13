@@ -77,7 +77,7 @@ public class ScheduleServiceImpl implements ScheduleService {
      *
      * @param requestDto 수정할 스케줄 정보를 담은 DTO
      * @param scheduleId 수정할 스케줄의 ID
-     * @throws PasswordMismatchException 비밀번호가 일치하지 않을 경우 발생
+     * @throws PasswordMismatchException 비밀번호가 일치하지 않을 경우 실행
      */
     @Override
     public void updateScheduleById(ScheduleRequestDto requestDto, Long scheduleId) {
@@ -92,7 +92,7 @@ public class ScheduleServiceImpl implements ScheduleService {
      *
      * @param scheduleId 삭제할 스케줄의 ID
      * @param password   삭제 요청 시 필요한 비밀번호
-     * @throws PasswordMismatchException 비밀번호가 일치하지 않을 경우 발생
+     * @throws PasswordMismatchException 비밀번호가 일치하지 않을 경우 실행
      */
     @Override
     public void deleteScheduleById(Long scheduleId, String password) {
@@ -120,7 +120,7 @@ public class ScheduleServiceImpl implements ScheduleService {
      *
      * @param scheduleId 검증할 스케줄의 ID
      * @param password   요청된 비밀번호
-     * @throws PasswordMismatchException 비밀번호가 일치하지 않을 경우 발생
+     * @throws PasswordMismatchException 비밀번호가 일치하지 않을 경우 실행
      */
     private void validatePassword(Long scheduleId, String password) {
         Object passwordFromDB = scheduleRepository.findScheduleByAttributeAndId("password", scheduleId);
@@ -140,7 +140,7 @@ public class ScheduleServiceImpl implements ScheduleService {
     }
 
     /**
-     * 업데이트 요청 DTO와 스케줄 ID를 기반으로 업데이트에 필요한 데이터를 병합합
+     * 업데이트 요청 DTO와 스케줄 ID를 기반으로 업데이트에 필요한 데이터를 병합
      * 요청 DTO에 값이 없는 필드는 기존 스케줄의 값을 유지
      *
      * @param requestDto 업데이트 요청 정보를 담은 DTO

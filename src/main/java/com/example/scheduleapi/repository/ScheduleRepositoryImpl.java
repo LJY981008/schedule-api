@@ -86,7 +86,7 @@ public class ScheduleRepositoryImpl implements ScheduleRepository {
     /**
      * {@inheritDoc}
      * <p>
-     * 특정 유저 ID로 스케줄 정보를 조회하고, 결과가 없으면 {@link InvalidScheduleIdException} 실행
+     * 특정 유저 ID로 스케줄 정보를 조회하고, 결과가 없으면 예외 실행
      * </p>
      *
      * @param userId 조회할 스케줄의 유저 ID
@@ -103,8 +103,7 @@ public class ScheduleRepositoryImpl implements ScheduleRepository {
     /**
      * {@inheritDoc}
      * <p>
-     * 특정 ID의 스케줄 정보에서 주어진 속성(컬럼)의 값을 조회하고,
-     * 결과가 없으면 {@link InvalidScheduleIdException} 실행
+     * 특정 ID의 스케줄 정보에서 주어진 속성의 값을 조회
      * </p>
      *
      * @param attributeName 조회할 속성의 이름
@@ -126,8 +125,7 @@ public class ScheduleRepositoryImpl implements ScheduleRepository {
     /**
      * {@inheritDoc}
      * <p>
-     * 특정 ID의 스케줄 정보를 업데이트하고,
-     * 업데이트된 행이 없으면 {@link InvalidScheduleIdException} 실행
+     * 특정 ID의 스케줄 정보를 업데이트
      * </p>
      *
      * @param scheduleMap 업데이트할 속성-값 Map
@@ -149,8 +147,7 @@ public class ScheduleRepositoryImpl implements ScheduleRepository {
     /**
      * {@inheritDoc}
      * <p>
-     * 특정 ID의 스케줄 정보를 삭제하고,
-     * 삭제된 행이 없으면 {@link InvalidScheduleIdException} 실행
+     * 특정 ID의 스케줄 정보를 삭제
      * </p>
      *
      * @param scheduleId 삭제할 스케줄의 ID
@@ -165,7 +162,7 @@ public class ScheduleRepositoryImpl implements ScheduleRepository {
     /**
      * 스케줄 정보를 생성하기 위한 파라미터 Map을 실행
      *
-     * @param schedule 생성할 스케줄 엔티티
+     * @param schedule 생성할 스케줄 Entity
      * @param userId   스케줄을 생성하는 사용자의 ID
      * @return 생성된 파라미터 Map
      */
@@ -185,7 +182,7 @@ public class ScheduleRepositoryImpl implements ScheduleRepository {
     }
 
     /**
-     * 조회 결과 리스트가 비어있으면 {@link InvalidScheduleIdException} 실행
+     * 조회 결과 리스트의 첫 요소를 반환하고, 리스트가 비어있는 경우 예외를 실행
      *
      * @param <T>        리스트의 요소 타입
      * @param resultList 조회 결과 리스트
@@ -200,7 +197,8 @@ public class ScheduleRepositoryImpl implements ScheduleRepository {
     }
 
     /**
-     * 업데이트 또는 삭제 작업의 결과 행 수가 0이면 {@link InvalidScheduleIdException} 실행
+     * 데이터 갱신한 후 결과를 확인한 후
+     * 갱신된 데이터가 없는 경우 예외를 실행
      *
      * @param rowResult  업데이트 또는 삭제 작업으로 영향을 받은 행 수
      * @param scheduleId 작업 대상 스케줄 ID

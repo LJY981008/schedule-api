@@ -38,7 +38,7 @@ public class ScheduleController {
      * @param dto           생성할 스케줄 정보를 담은 DTO
      * @param bindingResult 요청 데이터의 유효성 검사 결과
      * @return 생성된 스케줄 (201 Created)
-     * @throws ValidationException 요청 데이터 유효성 검사 실패 시 발생
+     * @throws ValidationException 요청 데이터 유효성 검사 실패 시 실행
      */
     @PostMapping
     public ResponseEntity<ScheduleResponseDto> createSchedule(@Valid @RequestBody ScheduleRequestDto dto, BindingResult bindingResult) {
@@ -93,7 +93,7 @@ public class ScheduleController {
      * @param scheduleId    수정할 스케줄의 ID
      * @param bindingResult 요청 데이터의 유효성 검사 결과
      * @return 업데이트 성공 시 메시지 (200 OK)
-     * @throws ValidationException 요청 데이터 유효성 검사 실패 시 발생
+     * @throws ValidationException 요청 데이터 유효성 검사 실패 시 실행
      */
     @PutMapping("/{scheduleId}")
     public ResponseEntity<String> updateSchedule(@Valid @RequestBody ScheduleRequestDto requestDto, @PathVariable Long scheduleId, BindingResult bindingResult) {
@@ -104,7 +104,7 @@ public class ScheduleController {
 
     /**
      * 특정 ID의 스케줄 정보를 삭제
-     * 삭제를 위해 비밀번호를 확인 (현재는 비밀번호 확인 로직 없음)
+     * 삭제를 위해 비밀번호를 확인
      *
      * @param password   삭제 요청 시 필요한 비밀번호
      * @param scheduleId 삭제할 스케줄의 ID
@@ -119,7 +119,7 @@ public class ScheduleController {
     }
 
     /**
-     * 요청 데이터의 유효성 검사 결과를 처리하고, 에러가 있을 경우 ValidationException을 실행
+     * 요청 데이터의 유효성 검사 결과를 처리하고, 에러가 있을 경우 예외처리
      *
      * @param bindingResult 유효성 검사 결과
      * @throws ValidationException 유효성 검사 실패 시 발생
