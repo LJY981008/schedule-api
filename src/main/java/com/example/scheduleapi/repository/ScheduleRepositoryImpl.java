@@ -174,7 +174,7 @@ public class ScheduleRepositoryImpl implements ScheduleRepository {
     }
 
     /**
-     * 특정 ID의 스케줄 updated_date를 조회합니다.
+     * 특정 ID의 스케줄 updated_date를 조회
      *
      * @param scheduleId 조회할 스케줄의 ID
      * @return 조회된 updated_date
@@ -185,13 +185,13 @@ public class ScheduleRepositoryImpl implements ScheduleRepository {
     }
 
     /**
-     * 조회 결과 리스트가 비어있으면 {@link InvalidScheduleIdException}을 던집니다.
+     * 조회 결과 리스트가 비어있으면 {@link InvalidScheduleIdException} 실행
      *
      * @param <T>        리스트의 요소 타입
      * @param resultList 조회 결과 리스트
      * @param scheduleId 조회 대상 스케줄 ID
      * @return 리스트의 첫 번째 요소 (존재하는 경우)
-     * @throws InvalidScheduleIdException 조회 결과가 없을 경우 발생
+     * @throws InvalidScheduleIdException 조회 결과가 없을 경우 실행
      */
     private <T> T queryOrElseThrow(List<T> resultList, Long scheduleId) {
         return resultList.stream()
@@ -200,11 +200,11 @@ public class ScheduleRepositoryImpl implements ScheduleRepository {
     }
 
     /**
-     * 업데이트 또는 삭제 작업의 결과 행 수가 0이면 {@link InvalidScheduleIdException}을 던집니다.
+     * 업데이트 또는 삭제 작업의 결과 행 수가 0이면 {@link InvalidScheduleIdException} 실행
      *
      * @param rowResult  업데이트 또는 삭제 작업으로 영향을 받은 행 수
      * @param scheduleId 작업 대상 스케줄 ID
-     * @throws InvalidScheduleIdException 작업 대상 스케줄이 없을 경우 발생
+     * @throws InvalidScheduleIdException 작업 대상 스케줄이 없을 경우 실행
      */
     private void updateOrElseThrow(int rowResult, Long scheduleId) {
         if (rowResult == 0)
