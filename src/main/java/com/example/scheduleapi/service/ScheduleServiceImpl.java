@@ -69,6 +69,14 @@ public class ScheduleServiceImpl implements ScheduleService {
         }
     }
 
+    @Override
+    public List<ScheduleResponseDto> findSchedulesByPage(Long page, Long size) {
+        List<Schedule> scheduleList = scheduleRepository.findSchedulesByPage(page, size);
+        return scheduleList.stream()
+                .map(this::makeResponseDto)
+                .collect(Collectors.toList());
+    }
+
     private ScheduleResponseDto makeResponseDto(Schedule schedule) {
         return new ScheduleResponseDto(schedule.getId(), schedule.getPublisher(), schedule.getPassword(), schedule.getTitle(), schedule.getContents(), schedule.getUpdatedDate());
     }

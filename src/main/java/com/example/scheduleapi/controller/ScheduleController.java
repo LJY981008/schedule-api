@@ -5,7 +5,6 @@ import com.example.scheduleapi.dto.ScheduleResponseDto;
 import com.example.scheduleapi.exceptions.ValidationException;
 import com.example.scheduleapi.service.ScheduleService;
 import com.example.scheduleapi.service.UserService;
-import com.example.scheduleapi.service.UserServiceImpl;
 import jakarta.validation.Valid;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -18,7 +17,7 @@ import java.util.List;
 import java.util.Map;
 
 @RestController
-@RequestMapping("/posts")
+@RequestMapping("/schedules")
 public class ScheduleController {
 
     private final ScheduleService scheduleService;
@@ -34,6 +33,7 @@ public class ScheduleController {
             @Valid @RequestBody ScheduleRequestDto dto,
             BindingResult bindingResult) {
         validateInput(bindingResult);
+        //TODO 이메일 형식 적용 + 200자 제한 필요
         userService.checkedSignup(dto);
         return new ResponseEntity<>(scheduleService.saveSchedule(dto), HttpStatus.CREATED);
     }
@@ -49,8 +49,15 @@ public class ScheduleController {
     }
 
     @GetMapping("/{id}")
-        public ResponseEntity<ScheduleResponseDto> readScheduleById(@PathVariable Long id) {
+    public ResponseEntity<ScheduleResponseDto> readScheduleById(@PathVariable Long id) {
         return ResponseEntity.ok(scheduleService.findScheduleById(id));
+    }
+
+    @GetMapping("/posts")
+    public ResponseEntity<List<ScheduleResponseDto>> readScheduleByPage(
+            @RequestParam(defaultValue = "0") Long page,
+            @RequestParam(defaultValue = "10") Long size) {
+        return ResponseEntity.ok(scheduleService.findSchedulesByPage(page, size));
     }
 
     @PutMapping("/{id}")
@@ -64,12 +71,15 @@ public class ScheduleController {
     }
 
     @DeleteMapping("/{id}")
-    public ResponseEntity<Void> deleteSchedule(@PathVariable Long id) {
+    public ResponseEntity<Void> deleteSchedule(
+            @RequestParam String password,
+            @PathVariable Long id) {
+        //TODO 비밀번호 인증처리 필요
         scheduleService.deleteSchedule(id);
         return new ResponseEntity<>(HttpStatus.OK);
     }
 
-    private void validateInput(BindingResult bindingResult){
+    private void validateInput(BindingResult bindingResult) {
         if (bindingResult.hasErrors()) {
             Map<String, String> errors = new HashMap<>();
             bindingResult.getFieldErrors().forEach(error ->

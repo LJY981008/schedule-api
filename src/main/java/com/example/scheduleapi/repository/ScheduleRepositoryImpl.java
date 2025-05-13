@@ -78,6 +78,12 @@ public class ScheduleRepositoryImpl implements ScheduleRepository {
         return jdbcTemplate.update("delete from post where id = ?", id);
     }
 
+    @Override
+    public List<Schedule> findSchedulesByPage(Long page, Long size) {
+        List<Schedule> result = jdbcTemplate.query("SELECT * FROM post ORDER BY id LIMIT ? OFFSET ?", scheduleRowMapper(), size, page * size);
+        return result;
+    }
+
     private Map<String, Object> makeParameters(Schedule schedule, Long user_id) {
         return Map.of("user_id",user_id,"publisher", schedule.getPublisher(), "password", schedule.getPassword(), "title", schedule.getTitle(), "contents", schedule.getContents(), "updated_date", LocalDate.now());
     }

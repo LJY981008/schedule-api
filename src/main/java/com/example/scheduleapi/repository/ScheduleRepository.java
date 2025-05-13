@@ -18,5 +18,8 @@ public interface ScheduleRepository {
     void updateScheduleOrElseThrow(Map<String, Object> scheduleMap, Long id);
 
     Object findScheduleByColumnKeyAndIdOrElseThrow(String key, Long id);
+
     int deleteSchedule(Long id);
+
+    List<Schedule> findSchedulesByPage(Long page, Long size);
 }
