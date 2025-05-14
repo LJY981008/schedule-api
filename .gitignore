@@ -22,9 +22,17 @@ bin/
 *.iws
 *.iml
 *.ipr
+.pro
+.DS_Store
+.gitattributes
+gradlew
+gradlew.bat
+settings.gradle
 out/
 !**/src/main/**/out/
 !**/src/test/**/out/
+/src/main/resources/*.properties
+/gradle/wrapper
 
 ### NetBeans ###
 /nbproject/private/
