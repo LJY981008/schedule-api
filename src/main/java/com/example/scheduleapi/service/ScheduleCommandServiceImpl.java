@@ -17,7 +17,8 @@ import java.util.*;
 import java.util.stream.Collectors;
 
 /**
- * {@link ScheduleCommandService} 인터페이스의 구현체로, 스케줄 관련 비즈니스 로직을 처리
+ * {@link ScheduleCommandService} 인터페이스의 구현체
+ * 스케줄 관련 비즈니스 로직(UPDATE)을 처리
  */
 @Service
 @RequiredArgsConstructor
@@ -41,7 +42,7 @@ public class ScheduleCommandServiceImpl implements ScheduleCommandService {
     @Transactional
     public void updateScheduleById(ScheduleRequestDto requestDto, Long scheduleId) {
         Optional<Object> passwordFromDB = scheduleQueryRepository.findScheduleByAttributeAndId("password", scheduleId);
-        queryValidator.validatePassword(passwordFromDB, scheduleId, requestDto.getPassword());
+        queryValidator.validatePassword(passwordFromDB, requestDto.getPassword());
 
         Map<String, Object> validRequestMap = mergeUpdateRequest(requestDto, scheduleId);
         int result = scheduleCommandRepository.updateScheduleById(validRequestMap, scheduleId);
@@ -52,7 +53,7 @@ public class ScheduleCommandServiceImpl implements ScheduleCommandService {
     @Transactional
     public void deleteScheduleById(Long scheduleId, String password) {
         Optional<Object> passwordFromDB = scheduleQueryRepository.findScheduleByAttributeAndId("password", scheduleId);
-        queryValidator.validatePassword(passwordFromDB, scheduleId, password);
+        queryValidator.validatePassword(passwordFromDB, password);
 
         int result = scheduleCommandRepository.deleteScheduleById(scheduleId);
         queryValidator.validateUpdate(result);

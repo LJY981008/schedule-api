@@ -12,7 +12,8 @@ import java.time.LocalDate;
 import java.util.Map;
 
 /**
- * {@link ScheduleCommandRepository} 인터페이스의 구현체 JDBC를 사용하여 스케줄 데이터를 관리
+ * {@link ScheduleCommandRepository} 인터페이스의 구현체
+ * JDBC를 사용하여 스케줄 데이터를 관리
  */
 @RequiredArgsConstructor
 @Repository

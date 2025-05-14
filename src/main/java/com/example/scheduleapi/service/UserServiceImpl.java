@@ -11,7 +11,8 @@ import org.springframework.transaction.annotation.Transactional;
 import java.util.Optional;
 
 /**
- * {@link UserService} 인터페이스의 구현체로, 사용자 관련 비즈니스 로직을 처리
+ * {@link UserService} 인터페이스의 구현체
+ * 사용자 관련 비즈니스 로직을 처리
  */
 @Service
 @RequiredArgsConstructor

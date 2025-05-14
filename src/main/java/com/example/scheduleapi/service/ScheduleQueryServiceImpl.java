@@ -15,6 +15,10 @@ import java.util.Comparator;
 import java.util.List;
 import java.util.stream.Collectors;
 
+/**
+ * {@link ScheduleQueryService} 인터페이스의 구현체
+ * 스케줄 관련 비즈니스 로직(SELECT)을 처리
+ */
 @Service
 @Transactional(readOnly = true)
 @AllArgsConstructor

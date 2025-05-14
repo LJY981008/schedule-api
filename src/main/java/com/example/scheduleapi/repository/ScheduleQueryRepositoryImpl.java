@@ -12,6 +12,10 @@ import java.time.LocalDate;
 import java.util.List;
 import java.util.Optional;
 
+/**
+ * {@link ScheduleQueryRepository} 인터페이스의 구현체
+ * JDBC를 사용하여 스케줄 데이터를 관리
+ */
 @Repository
 @AllArgsConstructor
 public class ScheduleQueryRepositoryImpl implements ScheduleQueryRepository {

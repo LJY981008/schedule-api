@@ -6,6 +6,9 @@ import java.time.LocalDate;
 import java.util.List;
 import java.util.Optional;
 
+/**
+ * 스케줄 데이터 SELECT를 위한 Repository 인터페이스
+ */
 public interface ScheduleQueryRepository {
 
     List<Schedule> findSchedulesByUserAndDateRange(Long userId, LocalDate startDate, LocalDate endDate);

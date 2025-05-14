@@ -6,7 +6,7 @@ import org.springframework.http.HttpStatusCode;
 import org.springframework.web.server.ResponseStatusException;
 
 /**
- * 유효하지 않거나 존재하지 않는 스케줄 ID로 요청했을 때 발생하는 예외 클래스
+ * 유효하지 않은 스케줄 ID로 요청했을 때 발생하는 예외 클래스
  */
 @Getter
 public class InvalidScheduleIdException extends ResponseStatusException {

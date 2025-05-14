@@ -5,7 +5,7 @@ import com.example.scheduleapi.entity.Schedule;
 import java.util.Map;
 
 /**
- * 스케줄 데이터 접근을 위한 Repository 인터페이스
+ * 스케줄 데이터 UPDATE를 위한 Repository 인터페이스
  */
 public interface ScheduleCommandRepository {
 

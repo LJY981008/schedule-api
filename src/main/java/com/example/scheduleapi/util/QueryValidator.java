@@ -7,10 +7,13 @@ import org.springframework.stereotype.Component;
 
 import java.util.Optional;
 
+/**
+ * Query 검증을 위한 유틸 클래스
+ */
 @Component
 public class QueryValidator {
 
-    public void validatePassword(Optional<Object> passwordFromDB, Long scheduleId, String password) {
+    public void validatePassword(Optional<Object> passwordFromDB, String password) {
         if (passwordFromDB.isEmpty()) {
             throw new InvalidScheduleIdException("schedule not found");
         } else if (!password.equals(passwordFromDB.get())) {

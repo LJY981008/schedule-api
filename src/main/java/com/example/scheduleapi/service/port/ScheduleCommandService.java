@@ -4,7 +4,7 @@ import com.example.scheduleapi.dto.ScheduleRequestDto;
 import com.example.scheduleapi.dto.ScheduleResponseDto;
 
 /**
- * 스케줄 관련 비즈니스 로직을 제공하는 인터페이스
+ * 스케줄 관련 비즈니스 로직(UPDATE)을 위한 Service 인터페이스
  */
 public interface ScheduleCommandService {
 

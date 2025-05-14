@@ -9,6 +9,9 @@ import org.springframework.web.bind.annotation.*;
 import java.time.LocalDate;
 import java.util.List;
 
+/**
+ * 스케줄 관련 API(SELECT)를 제공하는 컨트롤러
+ */
 @RestController
 @RequestMapping("/schedules")
 @RequiredArgsConstructor
