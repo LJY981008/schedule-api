@@ -28,6 +28,7 @@ bin/
 gradlew
 gradlew.bat
 settings.gradle
+build.gradle
 out/
 !**/src/main/**/out/
 !**/src/test/**/out/
