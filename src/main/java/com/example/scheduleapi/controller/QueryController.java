@@ -2,6 +2,7 @@ package com.example.scheduleapi.controller;
 
 import com.example.scheduleapi.dto.ScheduleResponseDto;
 import com.example.scheduleapi.service.port.ScheduleQueryService;
+import com.example.scheduleapi.util.RequestValidator;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
