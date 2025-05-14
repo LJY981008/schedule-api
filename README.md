@@ -95,7 +95,7 @@ scheduleId (필수, integer): 조회할 스케줄의 ID
 
 {
   "status": "NOT_FOUND",
-  "message": "not found schedule ID: {scheduleId}"
+  "message": "schedule not found"
 }
 ```
 ## 4. 페이지별 스케줄 조회 (GET /schedules/posts)
