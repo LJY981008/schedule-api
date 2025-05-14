@@ -1,4 +1,7 @@
-# 트러블 슈팅
+# 스케줄 관리 API
+## 목적
+JDBC Template 구조 학습을 위한 개인 연습 프로젝트
+## 트러블 슈팅
 [프로젝트를 하며 개선해야할 나의 개발 과정](https://t-era.tistory.com/225)
 
 [SQL에 컬럼을 동적으로 반영하면 생기는 문제](https://t-era.tistory.com/223)
