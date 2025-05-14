@@ -20,13 +20,6 @@ public class ScheduleRequestDto {
     private String publisher;
     private String title;
 
-    /**
-     * 게시글 수정 시 유효성 검사를 위한 메서드
-     * 게시글의 publisher 또는 contents 중 하나라도 값이 존재해야 수정을 허용
-     * {@code @AssertTrue} 어노테이션을 통해 검증
-     *
-     * @return publisher 또는 contents 중 하나라도 null이 아니면 true, 아니면 false
-     */
     @AssertTrue(message = "입력을 확인해주세요")
     public boolean isUpdatePostValid() {
         return publisher != null || contents != null;

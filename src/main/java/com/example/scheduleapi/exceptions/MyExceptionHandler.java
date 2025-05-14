@@ -1,6 +1,9 @@
 package com.example.scheduleapi.exceptions;
 
-import org.springframework.http.HttpStatus;
+import com.example.scheduleapi.exceptions.custom.InvalidScheduleIdException;
+import com.example.scheduleapi.exceptions.custom.InvalidUserIdException;
+import com.example.scheduleapi.exceptions.custom.PasswordMismatchException;
+import com.example.scheduleapi.exceptions.custom.ValidationException;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.RestControllerAdvice;
@@ -13,15 +16,23 @@ import java.util.Map;
 @RestControllerAdvice
 public class MyExceptionHandler {
 
-    /**
-     * {@link ValidationException}이 발생했을 때 처리하는 메서드
-     * 유효성 검사 실패 시 발생한 에러 정보를 담아 HTTP 상태 코드 400 (BAD_REQUEST)와 함께 응답
-     *
-     * @param ex 발생한 {@link ValidationException}
-     * @return 에러 정보를 담은 Map과 HTTP 상태 코드를 포함하는 {@link ResponseEntity}
-     */
     @ExceptionHandler(ValidationException.class)
     public ResponseEntity<Map<String, String>> handleValidationException(ValidationException ex) {
-        return new ResponseEntity<>(ex.getErrors(), HttpStatus.BAD_REQUEST);
+        return new ResponseEntity<>(ex.getErrors(), ex.getStatus());
+    }
+
+    @ExceptionHandler(InvalidUserIdException.class)
+    public ResponseEntity<String> handleInvalidUserIdException(InvalidScheduleIdException ex) {
+        return new ResponseEntity<>(ex.getMessage(), ex.getStatus());
+    }
+
+    @ExceptionHandler(InvalidScheduleIdException.class)
+    public ResponseEntity<String> handleInvalidScheduleIdException(InvalidScheduleIdException ex) {
+        return new ResponseEntity<>(ex.getMessage(), ex.getStatus());
+    }
+
+    @ExceptionHandler(PasswordMismatchException.class)
+    public ResponseEntity<String> handlePasswordMismatchException(PasswordMismatchException ex) {
+        return new ResponseEntity<>(ex.getMessage(), ex.getStatus());
     }
 }
