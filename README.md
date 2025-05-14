@@ -1,3 +1,11 @@
+# 트러블 슈팅
+[프로젝트를 하며 개선해야할 나의 개발 과정](https://t-era.tistory.com/225)
+
+[SQL에 컬럼을 동적으로 반영하면 생기는 문제](https://t-era.tistory.com/223)
+
+[@Valid를 사용해 요청 검수하는 방법](https://t-era.tistory.com/220)
+
+
 # 데이터 베이스 테이블 다이어그램
 ![ERD](https://github.com/user-attachments/assets/be40269e-a04d-4e01-aa48-b98dd7dc0dcb)
 
@@ -188,9 +196,3 @@ password (필수, string): 스케줄 삭제 권한 확인 비밀번호
 * **UserService 관련 API**
 
 회원 가입 (내부 로직): 스케줄 생성 요청 시, 제공된 사용자 정보(userId)가 존재하지 않으면 새로운 사용자를 등록, 별도의 회원 가입 API 엔드포인트는 없음
-
-## 트러블 슈팅
-
-[SQL에 컬럼을 동적으로 반영하면 생기는 문제](https://t-era.tistory.com/223)
-
-[@Valid를 사용해 요청 검수하는 방법](https://t-era.tistory.com/220)
