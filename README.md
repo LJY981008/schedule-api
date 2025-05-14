@@ -1,3 +1,6 @@
+# 데이터 베이스 테이블 다이어그램
+![ERD](https://github.com/user-attachments/assets/be40269e-a04d-4e01-aa48-b98dd7dc0dcb)
+
 # 스케줄 관리 API 명세서
 
 스케줄 관리 시스템의 API 엔드포인트 및 요청/응답 스키마 명세서
