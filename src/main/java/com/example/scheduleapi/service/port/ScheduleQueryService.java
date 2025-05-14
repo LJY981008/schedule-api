@@ -1,6 +1,6 @@
 package com.example.scheduleapi.service.port;
 
-import com.example.scheduleapi.dto.ScheduleResponseDto;
+import com.example.scheduleapi.dto.ResponseDto;
 
 import java.util.List;
 
@@ -9,9 +9,9 @@ import java.util.List;
  */
 public interface ScheduleQueryService {
 
-    List<ScheduleResponseDto> findSchedulesByUserAndDateRange(Long userId, String startDate, String endDate);
+    List<ResponseDto> findSchedulesByUserAndDateRange(Long userId, String startDate, String endDate);
 
-    List<ScheduleResponseDto> findSchedulesByPage(Long page, Long size);
+    List<ResponseDto> findSchedulesByPage(Long page, Long size);
 
-    ScheduleResponseDto findScheduleByScheduleId(Long userId);
+    ResponseDto findScheduleByScheduleId(Long userId);
 }

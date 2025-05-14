@@ -1,7 +1,7 @@
 package com.example.scheduleapi.controller;
 
-import com.example.scheduleapi.dto.ScheduleRequestDto;
-import com.example.scheduleapi.dto.ScheduleResponseDto;
+import com.example.scheduleapi.dto.RequestDto;
+import com.example.scheduleapi.dto.ResponseDto;
 import com.example.scheduleapi.service.port.ScheduleCommandService;
 import com.example.scheduleapi.util.RequestValidator;
 import jakarta.validation.Valid;
@@ -23,14 +23,14 @@ public class CommandController {
     private final ScheduleCommandService scheduleCommandService;
 
     @PostMapping
-    public ResponseEntity<ScheduleResponseDto> createSchedule(
-            @Valid @RequestBody ScheduleRequestDto dto, BindingResult bindingResult) {
+    public ResponseEntity<ResponseDto> createSchedule(
+            @Valid @RequestBody RequestDto dto, BindingResult bindingResult) {
         requestValidator.requestValidateErrorToMap(bindingResult);
         return ResponseEntity.status(HttpStatus.CREATED).body(scheduleCommandService.createSchedule(dto));
     }
 
     @PutMapping("/{scheduleId}")
-    public ResponseEntity<String> updateSchedule(@Valid @RequestBody ScheduleRequestDto requestDto, BindingResult bindingResult, @PathVariable Long scheduleId) {
+    public ResponseEntity<String> updateSchedule(@Valid @RequestBody RequestDto requestDto, BindingResult bindingResult, @PathVariable Long scheduleId) {
         requestValidator.requestValidateErrorToMap(bindingResult);
         scheduleCommandService.updateScheduleById(requestDto, scheduleId);
         return ResponseEntity.ok("업데이트 성공");

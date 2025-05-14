@@ -1,6 +1,6 @@
 package com.example.scheduleapi.service;
 
-import com.example.scheduleapi.dto.ScheduleResponseDto;
+import com.example.scheduleapi.dto.ResponseDto;
 import com.example.scheduleapi.entity.Schedule;
 import com.example.scheduleapi.repository.port.ScheduleQueryRepository;
 import com.example.scheduleapi.service.port.ScheduleQueryService;
@@ -28,7 +28,7 @@ public class ScheduleQueryServiceImpl implements ScheduleQueryService {
     private final ScheduleQueryRepository scheduleQueryRepository;
 
     @Override
-    public List<ScheduleResponseDto> findSchedulesByUserAndDateRange(Long userId, String startDate, String endDate) {
+    public List<ResponseDto> findSchedulesByUserAndDateRange(Long userId, String startDate, String endDate) {
         DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd");
         LocalDate parsedStartDate = LocalDate.parse(startDate, formatter);
         LocalDate parsedEndDate = LocalDate.parse(endDate, formatter);
@@ -36,25 +36,25 @@ public class ScheduleQueryServiceImpl implements ScheduleQueryService {
 
         return scheduleList.stream()
                 .map(this::convertToResponseDto)
-                .sorted(Comparator.comparing(ScheduleResponseDto::getUpdatedDate).reversed())
+                .sorted(Comparator.comparing(ResponseDto::getUpdatedDate).reversed())
                 .collect(Collectors.toList());
     }
 
     @Override
-    public ScheduleResponseDto findScheduleByScheduleId(Long scheduleId) {
+    public ResponseDto findScheduleByScheduleId(Long scheduleId) {
         Schedule schedule = queryValidator.validateSchedule(scheduleQueryRepository.findScheduleById(scheduleId));
         return convertToResponseDto(schedule);
     }
 
     @Override
-    public List<ScheduleResponseDto> findSchedulesByPage(Long page, Long size) {
+    public List<ResponseDto> findSchedulesByPage(Long page, Long size) {
         List<Schedule> scheduleList = scheduleQueryRepository.findSchedulesByPage(page, size);
         return scheduleList.stream()
                 .map(this::convertToResponseDto)
                 .collect(Collectors.toList());
     }
 
-    private ScheduleResponseDto convertToResponseDto(Schedule schedule) {
-        return new ScheduleResponseDto(schedule.getScheduleId(), schedule.getPublisher(), schedule.getPassword(), schedule.getTitle(), schedule.getContents(), schedule.getUpdatedDate());
+    private ResponseDto convertToResponseDto(Schedule schedule) {
+        return new ResponseDto(schedule.getScheduleId(), schedule.getPublisher(), schedule.getPassword(), schedule.getTitle(), schedule.getContents(), schedule.getUpdatedDate());
     }
 }

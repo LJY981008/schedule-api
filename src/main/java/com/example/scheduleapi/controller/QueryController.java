@@ -1,8 +1,7 @@
 package com.example.scheduleapi.controller;
 
-import com.example.scheduleapi.dto.ScheduleResponseDto;
+import com.example.scheduleapi.dto.ResponseDto;
 import com.example.scheduleapi.service.port.ScheduleQueryService;
-import com.example.scheduleapi.util.RequestValidator;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -21,18 +20,18 @@ public class QueryController {
     private final ScheduleQueryService scheduleQueryService;
 
     @GetMapping
-    public ResponseEntity<List<ScheduleResponseDto>> getSchedulesByUserAndDateRange(@RequestParam Long userId, @RequestParam(required = false, defaultValue = "0001-01-01") String startDate, @RequestParam(required = false) String endDate) {
+    public ResponseEntity<List<ResponseDto>> getSchedulesByUserAndDateRange(@RequestParam Long userId, @RequestParam(required = false, defaultValue = "0001-01-01") String startDate, @RequestParam(required = false) String endDate) {
         if (endDate == null || endDate.isBlank()) endDate = LocalDate.now().toString();
         return ResponseEntity.ok(scheduleQueryService.findSchedulesByUserAndDateRange(userId, startDate, endDate));
     }
 
     @GetMapping("/{scheduleId}")
-    public ResponseEntity<ScheduleResponseDto> getScheduleById(@PathVariable Long scheduleId) {
+    public ResponseEntity<ResponseDto> getScheduleById(@PathVariable Long scheduleId) {
         return ResponseEntity.ok(scheduleQueryService.findScheduleByScheduleId(scheduleId));
     }
 
     @GetMapping("/posts")
-    public ResponseEntity<List<ScheduleResponseDto>> getSchedulesByPage(@RequestParam(defaultValue = "0") Long pageNumber, @RequestParam(defaultValue = "10") Long pageSize) {
+    public ResponseEntity<List<ResponseDto>> getSchedulesByPage(@RequestParam(defaultValue = "0") Long pageNumber, @RequestParam(defaultValue = "10") Long pageSize) {
         return ResponseEntity.ok(scheduleQueryService.findSchedulesByPage(pageNumber, pageSize));
     }
 }

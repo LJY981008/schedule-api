@@ -1,6 +1,6 @@
 package com.example.scheduleapi.service;
 
-import com.example.scheduleapi.dto.ScheduleRequestDto;
+import com.example.scheduleapi.dto.RequestDto;
 import com.example.scheduleapi.entity.User;
 import com.example.scheduleapi.repository.port.UserRepository;
 import com.example.scheduleapi.service.port.UserService;
@@ -22,7 +22,7 @@ public class UserServiceImpl implements UserService {
 
     @Override
     @Transactional
-    public void registerUserIfNew(ScheduleRequestDto dto) {
+    public void registerUserIfNew(RequestDto dto) {
         User user = new User(dto.getUserId(), dto.getPublisher(), dto.getEmail(), dto.getPassword());
         Optional<Object> findUserId = userRepository.findUserAttributeById("user_id", user.getUserId());
         if (findUserId.isEmpty())

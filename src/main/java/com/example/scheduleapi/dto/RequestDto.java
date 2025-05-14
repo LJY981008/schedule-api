@@ -7,7 +7,7 @@ import lombok.Getter;
  * 스케줄 생성 및 수정 요청 시 사용되는 DTO 클래스
  */
 @Getter
-public class ScheduleRequestDto {
+public class RequestDto {
     @NotBlank(message = "비밀번호를 입력해주세요.")
     private String password;
     @NotNull(message = "사용자 아이디를 입력해주세요.")

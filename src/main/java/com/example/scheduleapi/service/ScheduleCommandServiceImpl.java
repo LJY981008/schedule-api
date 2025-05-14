@@ -1,7 +1,7 @@
 package com.example.scheduleapi.service;
 
-import com.example.scheduleapi.dto.ScheduleRequestDto;
-import com.example.scheduleapi.dto.ScheduleResponseDto;
+import com.example.scheduleapi.dto.RequestDto;
+import com.example.scheduleapi.dto.ResponseDto;
 import com.example.scheduleapi.entity.Schedule;
 import com.example.scheduleapi.repository.port.ScheduleCommandRepository;
 import com.example.scheduleapi.repository.port.ScheduleQueryRepository;
@@ -31,7 +31,7 @@ public class ScheduleCommandServiceImpl implements ScheduleCommandService {
 
     @Override
     @Transactional
-    public ScheduleResponseDto createSchedule(ScheduleRequestDto dto) {
+    public ResponseDto createSchedule(RequestDto dto) {
         Schedule schedule = new Schedule(dto.getPublisher(), dto.getPassword(), dto.getTitle(), dto.getContents());
         userService.registerUserIfNew(dto);
         scheduleCommandRepository.createSchedule(schedule, dto.getUserId());
@@ -40,7 +40,7 @@ public class ScheduleCommandServiceImpl implements ScheduleCommandService {
 
     @Override
     @Transactional
-    public void updateScheduleById(ScheduleRequestDto requestDto, Long scheduleId) {
+    public void updateScheduleById(RequestDto requestDto, Long scheduleId) {
         Optional<Object> passwordFromDB = scheduleQueryRepository.findScheduleByAttributeAndId("password", scheduleId);
         queryValidator.validatePassword(passwordFromDB, requestDto.getPassword());
 
@@ -59,11 +59,11 @@ public class ScheduleCommandServiceImpl implements ScheduleCommandService {
         queryValidator.validateUpdate(result);
     }
 
-    private ScheduleResponseDto convertToResponseDto(Schedule schedule) {
-        return new ScheduleResponseDto(schedule.getScheduleId(), schedule.getPublisher(), schedule.getPassword(), schedule.getTitle(), schedule.getContents(), schedule.getUpdatedDate());
+    private ResponseDto convertToResponseDto(Schedule schedule) {
+        return new ResponseDto(schedule.getScheduleId(), schedule.getPublisher(), schedule.getPassword(), schedule.getTitle(), schedule.getContents(), schedule.getUpdatedDate());
     }
 
-    private Map<String, Object> mergeUpdateRequest(ScheduleRequestDto requestDto, Long scheduleId) {
+    private Map<String, Object> mergeUpdateRequest(RequestDto requestDto, Long scheduleId) {
         Map<String, Object> finalData = new HashMap<>(convertRequestDtoToMap(requestDto));
         String[] fields = {"publisher", "contents"};
         for (String field : fields) {
@@ -75,7 +75,7 @@ public class ScheduleCommandServiceImpl implements ScheduleCommandService {
         return finalData;
     }
 
-    private Map<String, Object> convertRequestDtoToMap(ScheduleRequestDto requestDto) {
+    private Map<String, Object> convertRequestDtoToMap(RequestDto requestDto) {
         ObjectMapper objectMapper = new ObjectMapper();
         Map<String, Object> dtoMap = objectMapper.convertValue(requestDto, Map.class);
         return dtoMap.entrySet().stream()
